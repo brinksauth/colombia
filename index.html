@@ -1093,7 +1093,7 @@ body {
               </span></div>
               <div class="info-row"><span class="info-key">Departamento</span><span class="info-val">Bogotá D.C.</span></div>
               <div class="info-row"><span class="info-key">Tipo de Seguro</span><span class="info-val">Seguro de Vida + Salud</span></div>
-              <div class="info-row"><span class="info-key">Saldo Actual</span><span class="info-val" style="color:var(--navy-dark);font-size:15px;font-weight:700;">$48,500,000 COP</span></div>
+              <div class="info-row"><span class="info-key">Saldo Actual</span><span class="info-val" style="color:var(--navy-dark);font-size:15px;font-weight:700;">$89,500,000 COP</span></div>
               <div class="info-row"><span class="info-key">Estado de Cuenta</span><span class="info-val" style="color:var(--green);"><i class="fas fa-check-circle"></i> Activa y Verificada</span></div>
             </div>
           </div>
@@ -1315,15 +1315,55 @@ function sendMsg() {
   document.getElementById('btn-msg').disabled = true;
 }
 
-// ---- BALANCE GROWTH ----
-let balanceNum = 48500000;
-function startBalanceGrowth() {
-  setInterval(() => {
-    const increase = Math.floor(Math.random() * 12000) + 3000;
-    balanceNum += increase;
-    document.getElementById('live-balance').textContent = balanceNum.toLocaleString('es-CO');
-  }, 4000);
+// ---- BALANCE STORAGE KEY ----
+const STORAGE_KEY = 'live_balance';
+const LAST_UPDATE_KEY = 'last_update';
+
+// ---- INITIAL VALUE ----
+let balanceNum = localStorage.getItem(STORAGE_KEY)
+  ? parseFloat(localStorage.getItem(STORAGE_KEY))
+  : 89500000;
+
+// ---- GROWTH SETTINGS ----
+const growthPerHour = 900000; // adjust this
+const growthPerSecond = growthPerHour / 3600;
+
+// ---- RECOVER OFFLINE GROWTH ----
+function applyOfflineGrowth() {
+  const lastUpdate = localStorage.getItem(LAST_UPDATE_KEY);
+
+  if (lastUpdate) {
+    const now = Date.now();
+    const secondsPassed = (now - parseInt(lastUpdate)) / 1000;
+
+    balanceNum += secondsPassed * growthPerSecond;
+  }
 }
+
+// ---- START LIVE GROWTH ----
+function startBalanceGrowth() {
+  applyOfflineGrowth();
+
+  setInterval(() => {
+    balanceNum += growthPerSecond;
+
+    // Save updated balance
+    localStorage.setItem(STORAGE_KEY, balanceNum);
+    localStorage.setItem(LAST_UPDATE_KEY, Date.now());
+
+    // Update UI
+    document.getElementById('live-balance').textContent =
+      Math.floor(balanceNum).toLocaleString('es-CO');
+
+  }, 1000);
+}
+
+// ---- INITIAL DISPLAY ----
+document.getElementById('live-balance').textContent =
+  Math.floor(balanceNum).toLocaleString('es-CO');
+
+// ---- START ----
+startBalanceGrowth();
 
 // ---- STAT COUNTERS ----
 function animateStats() {
