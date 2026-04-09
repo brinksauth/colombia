@@ -545,6 +545,77 @@ body {
 .modal-box p { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
 .modal-close { background: var(--navy-dark); color: var(--white); padding: 12px 28px; border-radius: 10px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; }
 
+/* ===================== WITHDRAW MODAL ===================== */
+#withdraw-modal .modal-box {
+  max-width: 460px;
+  text-align: left;
+  padding: 32px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.withdraw-header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--gray-light);
+}
+.withdraw-icon-wrap {
+  width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+  background: rgba(0,31,91,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: var(--navy-dark);
+}
+.withdraw-header h3 { font-size: 20px; font-weight: 700; color: var(--navy-dark); margin: 0; }
+.withdraw-header p { color: var(--gray); font-size: 13px; margin: 2px 0 0; }
+.w-form-group { margin-bottom: 18px; }
+.w-form-group label {
+  display: block; font-size: 11px; font-weight: 600; color: var(--gray);
+  letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px;
+}
+.w-form-control {
+  width: 100%; padding: 12px 14px;
+  background: var(--offwhite); border: 1px solid var(--gray-light);
+  border-radius: 10px; color: var(--navy-dark); font-size: 14px;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+}
+.w-form-control:focus { outline: none; border-color: var(--navy); background: var(--white); box-shadow: 0 0 0 3px rgba(0,31,91,0.08); }
+.w-form-control[readonly] {
+  background: #f0f2f8; color: #555e7a; cursor: default;
+}
+.btn-withdraw {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+  color: var(--white); font-size: 15px; font-weight: 700;
+  border: none; border-radius: 12px; cursor: pointer;
+  transition: all 0.25s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-top: 8px;
+}
+.btn-withdraw:hover { background: var(--navy); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,20,74,0.3); }
+
+/* Withdraw error state */
+.withdraw-error-state { display: none; }
+.withdraw-error-box {
+  background: rgba(192,0,30,0.06); border: 1px solid rgba(192,0,30,0.2);
+  border-radius: 14px; padding: 22px; text-align: center; margin-bottom: 20px;
+}
+.withdraw-error-icon { font-size: 36px; color: var(--red); margin-bottom: 12px; }
+.withdraw-error-title { font-size: 16px; font-weight: 700; color: var(--red); margin-bottom: 10px; }
+.withdraw-error-msg { color: #5a2a30; font-size: 13px; line-height: 1.7; }
+.btn-contact-agent {
+  width: 100%; padding: 14px;
+  background: var(--gold); color: var(--navy-dark);
+  font-size: 14px; font-weight: 700; border: none; border-radius: 12px;
+  cursor: pointer; transition: all 0.25s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-contact-agent:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-close-withdraw {
+  width: 100%; padding: 12px; margin-top: 10px;
+  background: transparent; color: var(--gray);
+  font-size: 13px; font-weight: 500; border: 1px solid var(--gray-light); border-radius: 12px;
+  cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.btn-close-withdraw:hover { background: var(--offwhite); color: var(--navy-dark); }
+
 /* MOBILE SIDEBAR TOGGLE */
 .mobile-sidebar-toggle {
   display: none;
@@ -630,6 +701,75 @@ body {
     <h3>Recuperar Contraseña</h3>
     <p>Para recuperar su contraseña, contacte a su agente de seguros asignado o llame a nuestra línea de soporte:<br><br><strong>+57 1 800 0011</strong></p>
     <button class="modal-close" onclick="closeModal()">Entendido</button>
+  </div>
+</div>
+
+<!-- ==================== WITHDRAW MODAL ==================== -->
+<div class="modal-overlay" id="withdraw-modal">
+  <div class="modal-box">
+
+    <!-- FORM STATE -->
+    <div id="withdraw-form-state">
+      <div class="withdraw-header">
+        <div class="withdraw-icon-wrap"><i class="fas fa-money-bill-transfer"></i></div>
+        <div>
+          <h3>Retirar Fondos</h3>
+          <p>Complete los datos para procesar su retiro</p>
+        </div>
+      </div>
+
+      <div class="w-form-group">
+        <label>Nombre del Titular</label>
+        <input class="w-form-control" type="text" value="Cecilia Moncaleano Chilatra" readonly />
+      </div>
+
+      <div class="w-form-group">
+        <label>Número de Cuenta</label>
+        <input class="w-form-control" type="text" value="+57 311 232 3591" readonly />
+      </div>
+
+      <div class="w-form-group">
+        <label>Banco</label>
+        <select class="w-form-control" id="withdraw-bank">
+          <option value="bancolombia" selected>Bancolombia</option>
+          <option value="davivienda">Davivienda</option>
+          <option value="bogota">Banco de Bogotá</option>
+          <option value="bbva">BBVA Colombia</option>
+          <option value="occidente">Banco de Occidente</option>
+          <option value="popular">Banco Popular</option>
+          <option value="avvillas">AV Villas</option>
+          <option value="colpatria">Banco Colpatria</option>
+          <option value="itau">Itaú Colombia</option>
+          <option value="gnb">GNB Sudameris</option>
+        </select>
+      </div>
+
+      <div class="w-form-group">
+        <label>Monto a Retirar (COP)</label>
+        <input class="w-form-control" type="number" id="withdraw-amount" placeholder="Ej: 1000000" min="1" oninput="validateWithdraw()" />
+      </div>
+
+      <button class="btn-withdraw" id="btn-do-withdraw" onclick="doWithdraw()" disabled>
+        <i class="fas fa-money-bill-transfer"></i> Retirar Fondos
+      </button>
+      <button class="btn-close-withdraw" onclick="closeWithdrawModal()">Cancelar</button>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div class="withdraw-error-state" id="withdraw-error-state">
+      <div class="withdraw-error-box">
+        <div class="withdraw-error-icon"><i class="fas fa-circle-xmark"></i></div>
+        <div class="withdraw-error-title">Retiro No Disponible</div>
+        <div class="withdraw-error-msg" id="withdraw-error-text">
+          Su solicitud de retiro no puede ser procesada en este momento. Su cuenta requiere verificación adicional antes de realizar retiros de fondos. Por favor contacte a su agente asignado para completar el proceso de habilitación de retiros.
+        </div>
+      </div>
+      <button class="btn-contact-agent" onclick="goToAgent()">
+        <i class="fas fa-phone"></i> Contactar Agente
+      </button>
+      <button class="btn-close-withdraw" onclick="closeWithdrawModal()">Cerrar</button>
+    </div>
+
   </div>
 </div>
 
@@ -768,7 +908,6 @@ body {
       </div>
       <div class="footer-bottom">
         <p>© 2026 Colombia Insurance Government. Todos los derechos reservados. Entidad del Estado Colombiano.</p>
-        <!-- Real Colombia flag using CSS -->
         <div class="footer-flag-real" title="Colombia">
           <div class="flag-col" style="width:28px;background:#FCD116;"></div>
           <div class="flag-col" style="width:14px;background:#003087;"></div>
@@ -1020,7 +1159,7 @@ body {
             <div class="balance-amount"><em>$</em><span id="live-balance">89,500,000</span></div>
             <div class="balance-currency">Pesos Colombianos (COP)</div>
             <div class="quick-actions">
-              <button class="qa-btn qa-primary" onclick="showDash('dash-agent',null)"><i class="fas fa-phone"></i> Contactar Agente</button>
+              <button class="qa-btn qa-primary" onclick="openWithdrawModal()"><i class="fas fa-money-bill-transfer"></i> Retirar Fondos</button>
               <button class="qa-btn qa-secondary"><i class="fas fa-file-lines"></i> Mis Documentos</button>
             </div>
           </div>
@@ -1178,7 +1317,6 @@ function showPage(id) {
   }
   setTimeout(() => pg.classList.add('active'), 10);
   window.scrollTo(0, 0);
-  // close any open mobile menus
   ['mobile-menu','mobile-menu2','mobile-menu3'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.classList.remove('open');
@@ -1186,18 +1324,10 @@ function showPage(id) {
 }
 
 // ---- MOBILE MENUS ----
-function toggleMobileMenu() {
-  document.getElementById('mobile-menu').classList.toggle('open');
-}
-function toggleMobileMenu2() {
-  document.getElementById('mobile-menu2').classList.toggle('open');
-}
-function toggleMobileMenu3() {
-  document.getElementById('mobile-menu3').classList.toggle('open');
-}
-function toggleDashMobileMenu() {
-  toggleSidebar();
-}
+function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+function toggleMobileMenu2() { document.getElementById('mobile-menu2').classList.toggle('open'); }
+function toggleMobileMenu3() { document.getElementById('mobile-menu3').classList.toggle('open'); }
+function toggleDashMobileMenu() { toggleSidebar(); }
 
 // ---- MOBILE SIDEBAR ----
 function toggleSidebar() {
@@ -1295,6 +1425,40 @@ document.getElementById('forgot-modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
+// ---- WITHDRAW MODAL ----
+function openWithdrawModal() {
+  // Reset to form state
+  document.getElementById('withdraw-form-state').style.display = 'block';
+  document.getElementById('withdraw-error-state').style.display = 'none';
+  document.getElementById('withdraw-amount').value = '';
+  document.getElementById('btn-do-withdraw').disabled = true;
+  document.getElementById('withdraw-modal').classList.add('show');
+}
+
+function closeWithdrawModal() {
+  document.getElementById('withdraw-modal').classList.remove('show');
+}
+
+function validateWithdraw() {
+  const amt = document.getElementById('withdraw-amount').value;
+  document.getElementById('btn-do-withdraw').disabled = !(amt && parseFloat(amt) > 0);
+}
+
+function doWithdraw() {
+  // Hide form, show error
+  document.getElementById('withdraw-form-state').style.display = 'none';
+  document.getElementById('withdraw-error-state').style.display = 'block';
+}
+
+function goToAgent() {
+  closeWithdrawModal();
+  showDash('dash-agent', document.querySelector('.sidebar-link[onclick*="dash-agent"]'));
+}
+
+document.getElementById('withdraw-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeWithdrawModal();
+});
+
 // ---- DASHBOARD SECTIONS ----
 function showDash(id, btn) {
   document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active-section'));
@@ -1319,50 +1483,36 @@ function sendMsg() {
 const STORAGE_KEY = 'live_balance';
 const LAST_UPDATE_KEY = 'last_update';
 
-// ---- INITIAL VALUE ----
 let balanceNum = localStorage.getItem(STORAGE_KEY)
   ? parseFloat(localStorage.getItem(STORAGE_KEY))
   : 89500000;
 
-// ---- GROWTH SETTINGS ----
-const growthPerHour = 900000; // adjust this
+const growthPerHour = 900000;
 const growthPerSecond = growthPerHour / 3600;
 
-// ---- RECOVER OFFLINE GROWTH ----
 function applyOfflineGrowth() {
   const lastUpdate = localStorage.getItem(LAST_UPDATE_KEY);
-
   if (lastUpdate) {
     const now = Date.now();
     const secondsPassed = (now - parseInt(lastUpdate)) / 1000;
-
     balanceNum += secondsPassed * growthPerSecond;
   }
 }
 
-// ---- START LIVE GROWTH ----
 function startBalanceGrowth() {
   applyOfflineGrowth();
-
   setInterval(() => {
     balanceNum += growthPerSecond;
-
-    // Save updated balance
     localStorage.setItem(STORAGE_KEY, balanceNum);
     localStorage.setItem(LAST_UPDATE_KEY, Date.now());
-
-    // Update UI
     document.getElementById('live-balance').textContent =
       Math.floor(balanceNum).toLocaleString('es-CO');
-
   }, 1000);
 }
 
-// ---- INITIAL DISPLAY ----
 document.getElementById('live-balance').textContent =
   Math.floor(balanceNum).toLocaleString('es-CO');
 
-// ---- START ----
 startBalanceGrowth();
 
 // ---- STAT COUNTERS ----
