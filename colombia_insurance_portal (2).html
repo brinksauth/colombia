@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Colombia Insurance Government — Portal Ciudadano</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --navy: #001f5b;
+  --navy-dark: #00144a;
+  --gold: #f5c518;
+  --gold-light: #ffd84d;
+  --red: #c0001e;
+  --red-light: #e8001f;
+  --white: #ffffff;
+  --offwhite: #f7f8fc;
+  --gray: #8a94a6;
+  --gray-light: #e8eaf0;
+  --text: #0d1b3e;
+  --green: #007a3d;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--offwhite);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ===================== LOADING ===================== */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--navy-dark);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-icon {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; color: var(--navy-dark);
+  animation: pulse-shield 1.4s ease-in-out infinite;
+  box-shadow: 0 0 40px rgba(245,197,24,0.4);
+  margin-bottom: 24px;
+}
+@keyframes pulse-shield {
+  0%,100% { transform: scale(1); box-shadow: 0 0 40px rgba(245,197,24,0.4); }
+  50% { transform: scale(1.08); box-shadow: 0 0 70px rgba(245,197,24,0.7); }
+}
+.loader-bar { width: 200px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.loader-bar-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 3px; animation: load-fill 1.8s ease forwards; }
+@keyframes load-fill { to { width: 100%; } }
+.loader-text { color: rgba(255,255,255,0.5); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-top: 14px; }
+
+/* ===================== PAGES ===================== */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ===================== HEADER / NAVBAR ===================== */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--navy-dark);
+  border-bottom: 1px solid rgba(245,197,24,0.2);
+}
+.flag-strip {
+  height: 4px;
+  background: linear-gradient(to right, var(--gold) 33.33%, var(--navy) 33.33%, var(--navy) 66.66%, var(--red) 66.66%);
+}
+.navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 70px;
+}
+.nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; }
+.nav-shield {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--navy-dark); flex-shrink: 0;
+}
+.nav-title { color: var(--white); font-size: 14px; font-weight: 600; line-height: 1.2; }
+.nav-title span { display: block; color: var(--gold); font-size: 11px; font-weight: 400; letter-spacing: 1px; }
+.nav-links { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500;
+  padding: 8px 16px; border-radius: 8px; transition: all 0.2s;
+  cursor: pointer; border: none; background: none; font-family: 'DM Sans', sans-serif;
+}
+.nav-link:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+.nav-cta {
+  background: var(--gold); color: var(--navy-dark);
+  font-size: 13px; font-weight: 700; padding: 10px 20px;
+  border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.hamburger span { width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+.mobile-menu {
+  display: none; flex-direction: column; gap: 0;
+  background: var(--navy-dark); padding: 12px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu button {
+  color: rgba(255,255,255,0.75); font-size: 14px; padding: 14px 24px;
+  background: none; border: none; cursor: pointer; text-align: left;
+  font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+}
+.mobile-menu button:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+
+/* ===================== FOOTER ===================== */
+.site-footer {
+  background: #000d2e;
+  padding: 60px 40px 0;
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto;
+}
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px; padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.footer-brand-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.footer-brand-logo .ficon {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--navy-dark);
+}
+.footer-brand-logo span { color: var(--white); font-weight: 600; font-size: 14px; }
+.footer-brand p { color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.8; max-width: 280px; }
+.footer-col h4 { color: var(--white); font-size: 12px; font-weight: 600; margin-bottom: 16px; letter-spacing: 1.5px; text-transform: uppercase; }
+.footer-col a { display: block; color: rgba(255,255,255,0.4); font-size: 13px; text-decoration: none; margin-bottom: 10px; transition: color 0.2s; cursor: pointer; }
+.footer-col a:hover { color: var(--gold); }
+.footer-bottom {
+  padding: 20px 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.footer-bottom p { color: rgba(255,255,255,0.25); font-size: 12px; }
+.footer-flag-real {
+  display: flex; gap: 3px; align-items: center;
+}
+.flag-col { height: 16px; border-radius: 1px; }
+
+/* ===================== HERO ===================== */
+.hero {
+  min-height: 100vh; padding-top: 74px;
+  background:
+    linear-gradient(160deg, rgba(0,20,74,0.93) 0%, rgba(0,10,40,0.86) 60%, rgba(192,0,30,0.5) 100%),
+    url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600') center/cover no-repeat;
+  display: flex; align-items: center;
+  padding-bottom: 80px;
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--offwhite));
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; padding: 80px 40px 0; position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(245,197,24,0.15); border: 1px solid rgba(245,197,24,0.3);
+  color: var(--gold); font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 100px; margin-bottom: 28px;
+  animation: fade-up 0.8s ease both;
+}
+.hero-badge i { font-size: 8px; animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 62px);
+  font-weight: 900; color: var(--white);
+  line-height: 1.1; margin-bottom: 24px;
+  animation: fade-up 0.8s 0.1s ease both;
+}
+.hero h1 em { color: var(--gold); font-style: normal; }
+.hero p {
+  color: rgba(255,255,255,0.72); font-size: 18px; line-height: 1.7;
+  margin-bottom: 40px; max-width: 520px;
+  animation: fade-up 0.8s 0.2s ease both;
+}
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; animation: fade-up 0.8s 0.3s ease both; }
+.btn-hero-primary {
+  background: var(--gold); color: var(--navy-dark);
+  font-size: 15px; font-weight: 700; padding: 16px 32px;
+  border-radius: 10px; border: none; cursor: pointer;
+  transition: all 0.25s; box-shadow: 0 8px 24px rgba(245,197,24,0.35);
+  font-family: 'DM Sans', sans-serif;
+}
+.btn-hero-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245,197,24,0.5); }
+.btn-hero-secondary {
+  background: transparent; color: var(--white);
+  font-size: 15px; font-weight: 500; padding: 16px 32px;
+  border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer;
+  transition: all 0.25s; font-family: 'DM Sans', sans-serif;
+}
+.btn-hero-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== STATS ===================== */
+.stats-section { background: var(--navy-dark); padding: 48px 40px; }
+.stats-grid {
+  max-width: 1000px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;
+}
+.stat-item { background: var(--navy-dark); padding: 32px 24px; text-align: center; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 700; color: var(--gold); line-height: 1; }
+.stat-label { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 6px; }
+
+/* ===================== FEATURES ===================== */
+.features-section { padding: 100px 40px; background: var(--offwhite); }
+.section-label { text-align: center; color: var(--red); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 700; color: var(--navy-dark); margin-bottom: 60px; line-height: 1.2; }
+.features-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.feature-card {
+  background: var(--white); border-radius: 20px; padding: 36px 28px;
+  border: 1px solid var(--gray-light); transition: all 0.3s; position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--red));
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+}
+.feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,20,74,0.12); }
+.feature-card:hover::before { transform: scaleX(1); }
+.feature-icon { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--navy-dark); margin-bottom: 20px; }
+.feature-card:nth-child(1) .feature-icon { background: rgba(0,31,91,0.08); }
+.feature-card:nth-child(2) .feature-icon { background: rgba(245,197,24,0.15); }
+.feature-card:nth-child(3) .feature-icon { background: rgba(192,0,30,0.08); }
+.feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--navy-dark); }
+.feature-card p { color: var(--gray); font-size: 14px; line-height: 1.7; }
+
+/* ===================== TESTIMONIALS ===================== */
+.testimonials { padding: 100px 40px; background: var(--navy-dark); }
+.testimonials .section-title { color: var(--white); }
+.testimonials .section-label { color: var(--gold); }
+.testimonials-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.testi-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 28px; transition: all 0.3s; }
+.testi-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); }
+.testi-stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; }
+.testi-text { color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.75; margin-bottom: 20px; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--red)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: var(--white); flex-shrink: 0; }
+.testi-name { color: var(--white); font-size: 14px; font-weight: 600; }
+.testi-city { color: rgba(255,255,255,0.4); font-size: 12px; }
+
+/* ===================== LOGIN PAGE ===================== */
+#page-login { min-height: 100vh; padding-top: 74px; }
+.login-bg {
+  min-height: calc(100vh - 74px);
+  background:
+    linear-gradient(135deg, rgba(0,20,74,0.96) 0%, rgba(0,5,20,0.92) 100%),
+    url('https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=1600') center/cover;
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 20px;
+}
+.login-box {
+  width: 100%; max-width: 420px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 28px; padding: 44px 40px;
+  backdrop-filter: blur(20px); animation: fade-up 0.6s ease both;
+}
+.login-logo { text-align: center; margin-bottom: 32px; }
+.shield-lg {
+  width: 68px; height: 68px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; color: var(--navy-dark); margin: 0 auto 14px;
+  box-shadow: 0 8px 24px rgba(245,197,24,0.3);
+}
+.login-logo h2 { color: var(--white); font-size: 20px; font-weight: 600; }
+.login-logo p { color: rgba(255,255,255,0.4); font-size: 13px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; color: rgba(255,255,255,0.6); font-size: 12px; font-weight: 500; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase; }
+.form-control {
+  width: 100%; padding: 14px 18px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; color: var(--white); font-size: 15px;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+}
+.form-control::placeholder { color: rgba(255,255,255,0.3); }
+.form-control:focus { outline: none; border-color: var(--gold); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 3px rgba(245,197,24,0.15); }
+.btn-action {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy-dark); font-size: 15px; font-weight: 700;
+  border: none; border-radius: 12px; cursor: pointer;
+  transition: all 0.25s; box-shadow: 0 6px 20px rgba(245,197,24,0.3);
+  margin-top: 8px; font-family: 'DM Sans', sans-serif;
+}
+.btn-action:disabled {
+  opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important;
+}
+.btn-action:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(245,197,24,0.5); }
+.login-links { display: flex; justify-content: space-between; margin-top: 20px; }
+.login-links a { color: rgba(255,255,255,0.45); font-size: 13px; text-decoration: none; cursor: pointer; transition: color 0.2s; }
+.login-links a:hover { color: var(--gold); }
+.error-msg { background: rgba(192,0,30,0.15); border: 1px solid rgba(192,0,30,0.3); color: #ff6b6b; font-size: 13px; padding: 12px 16px; border-radius: 10px; margin-top: 14px; display: none; }
+
+/* ===================== REGISTER PAGE ===================== */
+#page-register { min-height: 100vh; padding-top: 74px; }
+.register-bg {
+  min-height: calc(100vh - 74px);
+  background:
+    linear-gradient(135deg, rgba(0,20,74,0.96) 0%, rgba(0,5,20,0.92) 100%),
+    url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400') center/cover;
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 20px;
+}
+.register-box {
+  width: 100%; max-width: 520px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 28px; padding: 44px 40px;
+  backdrop-filter: blur(20px); animation: fade-up 0.6s ease both;
+}
+.reg-header { text-align: center; margin-bottom: 32px; }
+.reg-header h2 { color: var(--white); font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.reg-header p { color: rgba(255,255,255,0.4); font-size: 13px; }
+.progress-bar { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 36px; }
+.prog-step {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 700;
+  transition: all 0.3s; flex-shrink: 0;
+}
+.prog-step.done { background: var(--gold); border-color: var(--gold); color: var(--navy-dark); }
+.prog-line { width: 60px; height: 2px; background: rgba(255,255,255,0.15); transition: background 0.3s; }
+.prog-line.done { background: var(--gold); }
+.step-content { display: none; }
+.step-content.active { display: block; }
+.step-title { color: var(--white); font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.step-sub { color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 24px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.step-btns { display: flex; gap: 12px; margin-top: 20px; }
+.btn-step {
+  flex: 1; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; border: none;
+}
+.btn-back { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); }
+.btn-back:hover { background: rgba(255,255,255,0.12); }
+.btn-next { background: var(--gold); color: var(--navy-dark); }
+.btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-next:not(:disabled):hover { background: var(--gold-light); transform: translateY(-1px); }
+.upload-area {
+  border: 2px dashed rgba(255,255,255,0.2); border-radius: 16px;
+  padding: 32px; text-align: center; cursor: pointer; position: relative;
+  transition: border-color 0.2s; background: rgba(255,255,255,0.03);
+}
+.upload-area:hover { border-color: var(--gold); }
+.upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-icon { font-size: 32px; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+.upload-text { color: rgba(255,255,255,0.4); font-size: 13px; }
+.upload-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; display: none; margin: 0 auto; border: 3px solid var(--gold); }
+.success-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--navy-dark);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 40px;
+  opacity: 0; visibility: hidden; transition: all 0.4s;
+}
+.success-overlay.show { opacity: 1; visibility: visible; }
+.success-icon { font-size: 64px; margin-bottom: 24px; color: var(--green); }
+.success-overlay h2 { color: var(--white); font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 16px; }
+.success-overlay p { color: rgba(255,255,255,0.6); font-size: 16px; line-height: 1.8; max-width: 400px; margin-bottom: 32px; }
+
+/* ===================== DASHBOARD ===================== */
+#page-dashboard { display: none; }
+#page-dashboard.active { display: flex; flex-direction: column; min-height: 100vh; }
+.dash-wrapper { display: flex; flex: 1; padding-top: 74px; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px; flex-shrink: 0;
+  background: var(--navy-dark);
+  min-height: calc(100vh - 74px);
+  position: sticky; top: 74px; height: calc(100vh - 74px);
+  overflow-y: auto; display: flex; flex-direction: column;
+  transition: transform 0.3s;
+}
+.sidebar-logo { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
+.sidebar-shield { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--navy-dark); flex-shrink: 0; }
+.sidebar-title { color: var(--white); font-size: 13px; font-weight: 700; line-height: 1.2; }
+.sidebar-title span { display: block; color: rgba(255,255,255,0.35); font-size: 10px; font-weight: 400; }
+.sidebar-nav { padding: 16px 12px; flex: 1; }
+.sidebar-section-label { color: rgba(255,255,255,0.25); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 12px 10px 6px; }
+.sidebar-link {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 11px 12px; border-radius: 10px;
+  color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 500;
+  background: none; border: none; cursor: pointer; text-align: left;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-bottom: 2px;
+}
+.sidebar-link i { width: 18px; text-align: center; font-size: 14px; }
+.sidebar-link:hover { background: rgba(255,255,255,0.07); color: var(--white); }
+.sidebar-link.active { background: rgba(245,197,24,0.15); color: var(--gold); }
+.sidebar-bottom { padding: 12px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: auto; }
+.sidebar-link.logout { color: rgba(255,100,100,0.7); }
+.sidebar-link.logout:hover { background: rgba(192,0,30,0.1); color: #ff6b6b; }
+
+/* DASH MAIN */
+.dash-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.dash-topbar {
+  background: var(--white); border-bottom: 1px solid var(--gray-light);
+  padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 74px; z-index: 10;
+}
+.dash-greeting { font-size: 15px; font-weight: 600; color: var(--navy-dark); }
+.dash-greeting span { display: block; font-size: 12px; font-weight: 400; color: var(--gray); margin-top: 2px; }
+.dash-actions { display: flex; align-items: center; gap: 12px; }
+.notif-btn {
+  width: 38px; height: 38px; border-radius: 50%; background: var(--offwhite);
+  border: 1px solid var(--gray-light); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 15px; position: relative; color: var(--navy-dark);
+}
+.notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); position: absolute; top: 6px; right: 6px; border: 1px solid var(--white); }
+.user-avatar {
+  width: 38px; height: 38px; border-radius: 50%; overflow: hidden;
+  border: 2px solid var(--gold); cursor: pointer;
+}
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.dash-section { display: none; }
+.dash-section.active-section { display: block; }
+.dash-content { padding: 28px 32px; }
+
+/* BALANCE HERO */
+.balance-hero {
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+  border-radius: 24px; padding: 40px 36px; margin-bottom: 24px;
+  position: relative; overflow: hidden; color: var(--white);
+}
+.balance-hero::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 250px; height: 250px; border-radius: 50%;
+  background: rgba(245,197,24,0.07);
+}
+.balance-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,200,100,0.15); border: 1px solid rgba(0,200,100,0.3); color: #4ce89a; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; font-weight: 600; }
+.balance-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4ce89a; }
+.balance-label { color: rgba(255,255,255,0.55); font-size: 13px; letter-spacing: 0.5px; margin-bottom: 8px; }
+.balance-amount { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--white); }
+.balance-amount em { font-size: 0.55em; color: var(--gold); font-style: normal; vertical-align: super; }
+.balance-currency { color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 28px; }
+.quick-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.qa-btn {
+  padding: 11px 20px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.qa-primary { background: var(--gold); color: var(--navy-dark); }
+.qa-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+.qa-secondary { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.15); }
+.qa-secondary:hover { background: rgba(255,255,255,0.15); }
+
+/* DASH GRID */
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.dash-card { background: var(--white); border-radius: 20px; padding: 24px; border: 1px solid var(--gray-light); }
+.dash-card h3 { font-size: 14px; font-weight: 700; color: var(--navy-dark); margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.5px; }
+.profile-display { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-light); }
+.profile-avatar-lg {
+  width: 60px; height: 60px; border-radius: 50%; overflow: hidden;
+  border: 3px solid var(--gold); flex-shrink: 0;
+}
+.profile-avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
+.profile-name { font-size: 16px; font-weight: 700; color: var(--navy-dark); }
+.verified-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(0,122,61,0.1); color: var(--green); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 100px; margin-top: 4px; }
+.info-list { display: flex; flex-direction: column; gap: 0; }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--gray-light); font-size: 13px; gap: 12px; }
+.info-row:last-child { border-bottom: none; }
+.info-key { color: var(--gray); flex-shrink: 0; }
+.info-val { font-weight: 500; color: var(--navy-dark); text-align: right; }
+
+/* ACTIVITY TABLE */
+.activity-table { width: 100%; border-collapse: collapse; }
+.activity-table th { text-align: left; font-size: 11px; color: var(--gray); letter-spacing: 1px; text-transform: uppercase; padding: 0 0 14px; font-weight: 500; }
+.activity-table td { padding: 12px 0; border-top: 1px solid var(--gray-light); font-size: 13px; }
+.activity-table tr:first-child td { border-top: none; }
+.activity-table .amt { font-weight: 700; color: var(--green); }
+.activity-status { display: inline-flex; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+.status-ok { background: rgba(0,150,80,0.1); color: #007a3d; }
+.status-pend { background: rgba(245,197,24,0.15); color: #8a6800; }
+
+/* INNER PAGE */
+.inner-page { padding: 28px 32px; max-width: 680px; }
+.inner-page h2 { font-size: 22px; font-weight: 700; color: var(--navy-dark); margin-bottom: 6px; }
+.inner-page .sub { color: var(--gray); font-size: 14px; margin-bottom: 28px; }
+.white-card { background: var(--white); border-radius: 20px; padding: 28px; border: 1px solid var(--gray-light); margin-bottom: 20px; }
+.lform-group { margin-bottom: 20px; }
+.lform-group label { display: block; font-size: 12px; color: var(--gray); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+.lform-control {
+  width: 100%; padding: 13px 16px;
+  background: var(--offwhite); border: 1px solid var(--gray-light);
+  border-radius: 12px; color: var(--navy-dark); font-size: 14px;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+}
+.lform-control:focus { outline: none; border-color: var(--navy); background: var(--white); box-shadow: 0 0 0 3px rgba(0,31,91,0.08); }
+.btn-submit {
+  width: 100%; padding: 15px; background: var(--navy-dark); color: var(--white);
+  font-size: 15px; font-weight: 600; border: none; border-radius: 12px;
+  cursor: pointer; transition: all 0.25s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-submit:hover { background: var(--navy); transform: translateY(-1px); }
+
+/* AGENT */
+.agent-card { background: var(--white); border-radius: 20px; padding: 32px; border: 1px solid var(--gray-light); }
+.agent-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-light); }
+.agent-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--red)); display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 700; font-size: 28px; flex-shrink: 0; }
+.agent-name { font-size: 22px; font-weight: 700; color: var(--navy-dark); margin-bottom: 4px; }
+.agent-role { color: var(--gray); font-size: 14px; }
+.agent-online { display: inline-flex; align-items: center; gap: 6px; color: #007a3d; font-size: 12px; font-weight: 600; margin-top: 8px; }
+.agent-online::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #007a3d; }
+.msg-success-note { background: rgba(0,150,80,0.08); border: 1px solid rgba(0,150,80,0.2); border-radius: 12px; padding: 16px; color: #007a3d; font-size: 14px; display: none; margin-top: 16px; }
+
+/* PROFILE PAGE */
+.profile-page-avatar {
+  width: 100px; height: 100px; border-radius: 50%; overflow: hidden;
+  border: 4px solid var(--gold); flex-shrink: 0;
+}
+.profile-page-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0,10,40,0.85); display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 20px; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: var(--white); border-radius: 24px; padding: 36px; max-width: 400px; width: 100%; text-align: center; animation: fade-up 0.4s ease both; }
+.modal-icon { font-size: 40px; color: var(--navy-dark); margin-bottom: 16px; }
+.modal-box h3 { font-size: 20px; font-weight: 700; color: var(--navy-dark); margin-bottom: 10px; }
+.modal-box p { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+.modal-close { background: var(--navy-dark); color: var(--white); padding: 12px 28px; border-radius: 10px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; }
+
+/* MOBILE SIDEBAR TOGGLE */
+.mobile-sidebar-toggle {
+  display: none;
+  position: fixed; bottom: 20px; right: 20px; z-index: 50;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--navy-dark); color: var(--white);
+  border: none; cursor: pointer; font-size: 20px;
+  box-shadow: 0 4px 20px rgba(0,20,74,0.4);
+  align-items: center; justify-content: center;
+}
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0; z-index: 30;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+}
+.sidebar-overlay.open { display: block; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 16px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+
+  .hero-inner { padding: 60px 20px 0; }
+  .hero p { font-size: 16px; }
+  .hero-btns { flex-direction: column; }
+  .btn-hero-primary, .btn-hero-secondary { width: 100%; text-align: center; }
+
+  .features-section, .testimonials { padding: 60px 20px; }
+  .stats-section { padding: 40px 20px; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+
+  .site-footer { padding: 40px 20px 0; }
+  .footer-top { grid-template-columns: 1fr; gap: 24px; padding-bottom: 32px; }
+
+  .login-box, .register-box { padding: 32px 24px; }
+  .form-row { grid-template-columns: 1fr; }
+
+  /* DASHBOARD MOBILE */
+  .sidebar {
+    position: fixed; top: 74px; left: 0; z-index: 40;
+    transform: translateX(-100%); width: 260px; height: calc(100vh - 74px);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .mobile-sidebar-toggle { display: flex; }
+  .dash-content { padding: 20px 16px; }
+  .inner-page { padding: 20px 16px; }
+  .dash-topbar { padding: 0 16px; }
+  .balance-hero { padding: 28px 20px; }
+  .quick-actions { flex-direction: column; }
+  .qa-btn { justify-content: center; }
+  .agent-header { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .register-box { padding: 28px 18px; }
+  .step-btns { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== LOADER ==================== -->
+<div id="loader">
+  <div class="loader-icon"><i class="fas fa-shield-halved"></i></div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  <p class="loader-text">Cargando Portal Gubernamental</p>
+</div>
+
+<!-- ==================== FORGOT PASSWORD MODAL ==================== -->
+<div class="modal-overlay" id="forgot-modal">
+  <div class="modal-box">
+    <div class="modal-icon"><i class="fas fa-lock"></i></div>
+    <h3>Recuperar Contraseña</h3>
+    <p>Para recuperar su contraseña, contacte a su agente de seguros asignado o llame a nuestra línea de soporte:<br><br><strong>+57 1 800 0011</strong></p>
+    <button class="modal-close" onclick="closeModal()">Entendido</button>
+  </div>
+</div>
+
+<!-- ==================== SUCCESS OVERLAY ==================== -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-icon"><i class="fas fa-circle-check"></i></div>
+  <h2>¡Cuenta Creada!</h2>
+  <p>Su cuenta ha sido registrada exitosamente. Por favor espere <strong style="color:var(--gold)">5 días hábiles</strong> para la verificación. Recibirá una notificación una vez que su cuenta sea aprobada.</p>
+  <button class="btn-action" style="max-width:280px;margin-top:8px;" onclick="showPage('page-login');document.getElementById('success-overlay').classList.remove('show')">Ir al Inicio de Sesión</button>
+</div>
+
+
+<!-- =====================================================================
+     PAGE: HOME
+====================================================================== -->
+<div id="page-home" class="page active">
+  <header class="site-header">
+    <div class="flag-strip"></div>
+    <nav class="navbar">
+      <a class="nav-brand" onclick="showPage('page-home')" style="cursor:pointer;text-decoration:none;">
+        <div class="nav-shield"><i class="fas fa-shield-halved"></i></div>
+        <div class="nav-title">Colombia Insurance Government<span>Portal Ciudadano Oficial</span></div>
+      </a>
+      <div class="nav-links">
+        <button class="nav-link" onclick="showPage('page-home')">Inicio</button>
+        <button class="nav-link">Servicios</button>
+        <button class="nav-link">Nosotros</button>
+        <button class="nav-cta" onclick="showPage('page-login')">Acceder al Portal</button>
+      </div>
+      <button class="hamburger" onclick="toggleMobileMenu()" id="hamburger-btn" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu">
+      <button onclick="showPage('page-home');toggleMobileMenu()">Inicio</button>
+      <button>Servicios</button>
+      <button>Nosotros</button>
+      <button onclick="showPage('page-login');toggleMobileMenu()">Acceder al Portal</button>
+      <button onclick="showPage('page-register');toggleMobileMenu()" style="color:var(--gold-light);">Crear Cuenta Nueva</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge"><i class="fas fa-circle" style="font-size:8px;"></i> Portal Oficial del Gobierno</div>
+      <h1>Seguros <em>Gubernamentales</em><br>para Todos los Ciudadanos</h1>
+      <p>Accede a tu cobertura de seguro, consulta tu saldo y gestiona tus beneficios desde cualquier lugar del país.</p>
+      <div class="hero-btns">
+        <button class="btn-hero-primary" onclick="showPage('page-login')">Acceder a Mi Seguro &rarr;</button>
+        <button class="btn-hero-secondary" onclick="showPage('page-register')">Crear Cuenta Nueva</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-num" data-target="8">0</div><div class="stat-label">Millones de Ciudadanos Asegurados</div></div>
+      <div class="stat-item"><div class="stat-num" data-target="32">0</div><div class="stat-label">Departamentos Cubiertos</div></div>
+      <div class="stat-item"><div class="stat-num" data-target="150">0</div><div class="stat-label">Mil Siniestros Resueltos</div></div>
+      <div class="stat-item"><div class="stat-num" data-target="99">0</div><div class="stat-label">% Satisfacción Ciudadana</div></div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <p class="section-label">Nuestros Programas</p>
+    <h2 class="section-title">Cobertura Integral para Cada Ciudadano</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-hospital"></i></div>
+        <h3>Seguro de Salud</h3>
+        <p>Cobertura médica completa con acceso a hospitales, especialistas y medicamentos en toda Colombia sin preocupaciones financieras.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-heart-pulse"></i></div>
+        <h3>Seguro de Vida</h3>
+        <p>Protección para tu familia con beneficiarios designados y coberturas por fallecimiento e incapacidad permanente.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-piggy-bank"></i></div>
+        <h3>Seguro de Pensión</h3>
+        <p>Plan de retiro seguro que garantiza ingresos estables para tu futuro, con aportes acumulados disponibles al jubilarte.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <p class="section-label">Testimonios</p>
+    <h2 class="section-title">Lo Que Dicen Nuestros Ciudadanos</h2>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-text">"El seguro de salud me permitió acceder a atención médica de calidad sin preocupaciones financieras. Ahora mi familia está completamente protegida."</p>
+        <div class="testi-author"><div class="testi-avatar">MG</div><div><div class="testi-name">María García López</div><div class="testi-city">Bogotá D.C.</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-text">"Como trabajador independiente, encontré en el seguro de vida la protección que mi familia necesitaba. El proceso fue simple y transparente."</p>
+        <div class="testi-author"><div class="testi-avatar">JM</div><div><div class="testi-name">Juan Martínez Ruiz</div><div class="testi-city">Medellín</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-text">"Pasé por un accidente y el seguro cubrió todos mis gastos sin complicaciones. El servicio al cliente fue excepcional en todo momento."</p>
+        <div class="testi-author"><div class="testi-avatar">CH</div><div><div class="testi-name">Carlos Hernández</div><div class="testi-city">Cali</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-brand-logo">
+            <div class="ficon"><i class="fas fa-shield-halved"></i></div>
+            <span>Colombia Insurance Government</span>
+          </div>
+          <p>Portal oficial de seguros gubernamentales para todos los ciudadanos colombianos. Protegemos a más de 8 millones de familias en todo el territorio nacional.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Portal</h4>
+          <a onclick="showPage('page-login')">Iniciar Sesión</a>
+          <a onclick="showPage('page-register')">Crear Cuenta</a>
+          <a onclick="showPage('page-login')">Mi Panel</a>
+        </div>
+        <div class="footer-col">
+          <h4>Servicios</h4>
+          <a>Seguro de Salud</a>
+          <a>Seguro de Vida</a>
+          <a>Seguro de Pensión</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <a><i class="fas fa-phone" style="margin-right:6px;font-size:11px;"></i>+57 1 800 0011</a>
+          <a><i class="fas fa-envelope" style="margin-right:6px;font-size:11px;"></i>info@cig.gov.co</a>
+          <a><i class="fas fa-location-dot" style="margin-right:6px;font-size:11px;"></i>Bogotá, Colombia</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Colombia Insurance Government. Todos los derechos reservados. Entidad del Estado Colombiano.</p>
+        <!-- Real Colombia flag using CSS -->
+        <div class="footer-flag-real" title="Colombia">
+          <div class="flag-col" style="width:28px;background:#FCD116;"></div>
+          <div class="flag-col" style="width:14px;background:#003087;"></div>
+          <div class="flag-col" style="width:14px;background:#CE1126;"></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<!-- =====================================================================
+     PAGE: LOGIN
+====================================================================== -->
+<div id="page-login" class="page">
+  <header class="site-header">
+    <div class="flag-strip"></div>
+    <nav class="navbar">
+      <a class="nav-brand" onclick="showPage('page-home')" style="cursor:pointer;text-decoration:none;">
+        <div class="nav-shield"><i class="fas fa-shield-halved"></i></div>
+        <div class="nav-title">Colombia Insurance Government<span>Portal Ciudadano Oficial</span></div>
+      </a>
+      <div class="nav-links">
+        <button class="nav-link" onclick="showPage('page-home')">&larr; Inicio</button>
+        <button class="nav-cta" onclick="showPage('page-register')">Crear Cuenta</button>
+      </div>
+      <button class="hamburger" onclick="toggleMobileMenu2()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu2">
+      <button onclick="showPage('page-home');toggleMobileMenu2()">← Inicio</button>
+      <button onclick="showPage('page-register');toggleMobileMenu2()">Crear Cuenta</button>
+    </div>
+  </header>
+
+  <div class="login-bg">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="shield-lg"><i class="fas fa-shield-halved"></i></div>
+        <h2>Bienvenido al Portal</h2>
+        <p>Ingrese sus credenciales para acceder</p>
+      </div>
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input class="form-control" id="inp-email" type="email" placeholder="correo@ejemplo.com" oninput="validateLogin()" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input class="form-control" id="inp-pass" type="password" placeholder="••••••••" oninput="validateLogin()" onkeydown="if(event.key==='Enter'&&!document.getElementById('btn-login').disabled)doLogin()" />
+      </div>
+      <div class="error-msg" id="login-err"><i class="fas fa-circle-exclamation" style="margin-right:6px;"></i>Credenciales incorrectas. Por favor intente de nuevo.</div>
+      <button class="btn-action" id="btn-login" onclick="doLogin()" disabled>Iniciar Sesión</button>
+      <div class="login-links">
+        <a onclick="document.getElementById('forgot-modal').classList.add('show')">¿Olvidó su contraseña?</a>
+        <a onclick="showPage('page-register')">Crear cuenta nueva</a>
+      </div>
+      <div style="margin-top:20px;padding:12px;border-radius:10px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.2);text-align:center;">
+        <p style="color:rgba(255,255,255,0.5);font-size:12px;">Demo: <strong style="color:var(--gold)">maria@example.com</strong> / <strong style="color:var(--gold)">admin123</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-bottom" style="padding:20px 0;">
+        <p>© 2026 Colombia Insurance Government. Portal Seguro — <i class="fas fa-lock" style="font-size:10px;margin-right:4px;color:var(--gold);"></i>Conexión Cifrada SSL</p>
+        <div class="footer-flag-real" title="Colombia">
+          <div class="flag-col" style="width:28px;background:#FCD116;"></div>
+          <div class="flag-col" style="width:14px;background:#003087;"></div>
+          <div class="flag-col" style="width:14px;background:#CE1126;"></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<!-- =====================================================================
+     PAGE: REGISTER
+====================================================================== -->
+<div id="page-register" class="page">
+  <header class="site-header">
+    <div class="flag-strip"></div>
+    <nav class="navbar">
+      <a class="nav-brand" onclick="showPage('page-home')" style="cursor:pointer;text-decoration:none;">
+        <div class="nav-shield"><i class="fas fa-shield-halved"></i></div>
+        <div class="nav-title">Colombia Insurance Government<span>Portal Ciudadano Oficial</span></div>
+      </a>
+      <div class="nav-links">
+        <button class="nav-link" onclick="showPage('page-home')">&larr; Inicio</button>
+        <button class="nav-cta" onclick="showPage('page-login')">Iniciar Sesión</button>
+      </div>
+      <button class="hamburger" onclick="toggleMobileMenu3()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu3">
+      <button onclick="showPage('page-home');toggleMobileMenu3()">← Inicio</button>
+      <button onclick="showPage('page-login');toggleMobileMenu3()">Iniciar Sesión</button>
+    </div>
+  </header>
+
+  <div class="register-bg">
+    <div class="register-box">
+      <div class="reg-header">
+        <h2>Crear Cuenta Nueva</h2>
+        <p>Complete los pasos para registrarse en el portal</p>
+      </div>
+      <div class="progress-bar">
+        <div class="prog-step done" id="ps1">1</div>
+        <div class="prog-line" id="pl1"></div>
+        <div class="prog-step" id="ps2">2</div>
+        <div class="prog-line" id="pl2"></div>
+        <div class="prog-step" id="ps3">3</div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="step-content active" id="step1">
+        <div class="step-title">Información Personal</div>
+        <div class="step-sub">Paso 1 de 3 — Sus datos básicos</div>
+        <div class="form-row">
+          <div class="form-group"><label>Nombre</label><input class="form-control" id="reg-nombre" type="text" placeholder="Juan" oninput="validateStep1()" /></div>
+          <div class="form-group"><label>Apellido</label><input class="form-control" id="reg-apellido" type="text" placeholder="García" oninput="validateStep1()" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Fecha de Nacimiento</label><input class="form-control" id="reg-fecha" type="date" oninput="validateStep1()" /></div>
+          <div class="form-group"><label>Género</label><select class="form-control" id="reg-genero" onchange="validateStep1()"><option value="">Seleccione...</option><option>Masculino</option><option>Femenino</option><option>Prefiero no decir</option></select></div>
+        </div>
+        <div class="step-btns"><button class="btn-step btn-next" id="step1-next" onclick="goStep(2)" disabled>Siguiente &rarr;</button></div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-content" id="step2">
+        <div class="step-title">Información de Contacto</div>
+        <div class="step-sub">Paso 2 de 3 — Cómo contactarle</div>
+        <div class="form-group"><label>Correo Electrónico</label><input class="form-control" id="reg-email" type="email" placeholder="correo@ejemplo.com" oninput="validateStep2()" /></div>
+        <div class="form-group"><label>Teléfono</label><input class="form-control" id="reg-tel" type="tel" placeholder="+57 300 000 0000" oninput="validateStep2()" /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Departamento</label><select class="form-control" id="reg-depto" onchange="validateStep2()"><option value="">Seleccione...</option><option>Bogotá D.C.</option><option>Antioquia</option><option>Valle del Cauca</option><option>Atlántico</option><option>Santander</option><option>Otro</option></select></div>
+          <div class="form-group"><label>Ciudad</label><input class="form-control" id="reg-ciudad" type="text" placeholder="Su ciudad" oninput="validateStep2()" /></div>
+        </div>
+        <div class="step-btns">
+          <button class="btn-step btn-back" onclick="goStep(1)">&larr; Atrás</button>
+          <button class="btn-step btn-next" id="step2-next" onclick="goStep(3)" disabled>Siguiente &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-content" id="step3">
+        <div class="step-title">Seguridad y Foto</div>
+        <div class="step-sub">Paso 3 de 3 — Finalizar registro</div>
+        <div class="form-group"><label>Contraseña</label><input class="form-control" id="reg-pass" type="password" placeholder="Mínimo 8 caracteres" oninput="validateStep3()" /></div>
+        <div class="form-group"><label>Confirmar Contraseña</label><input class="form-control" id="reg-pass2" type="password" placeholder="Repita la contraseña" oninput="validateStep3()" /></div>
+        <div class="form-group" style="margin-top:20px;">
+          <label>Foto de Perfil</label>
+          <div class="upload-area" id="upload-area">
+            <input type="file" accept="image/*" onchange="previewPhoto(this)" />
+            <img id="photo-preview" class="upload-preview" alt="Preview" />
+            <div id="upload-placeholder">
+              <div class="upload-icon"><i class="fas fa-camera"></i></div>
+              <div class="upload-text">Haga clic para subir su foto</div>
+            </div>
+          </div>
+        </div>
+        <div class="step-btns">
+          <button class="btn-step btn-back" onclick="goStep(2)">&larr; Atrás</button>
+          <button class="btn-step btn-next" id="step3-next" onclick="completeRegister()" disabled>Crear Cuenta ✓</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-bottom" style="padding:20px 0;">
+        <p>© 2026 Colombia Insurance Government. Registro seguro.</p>
+        <div class="footer-flag-real" title="Colombia">
+          <div class="flag-col" style="width:28px;background:#FCD116;"></div>
+          <div class="flag-col" style="width:14px;background:#003087;"></div>
+          <div class="flag-col" style="width:14px;background:#CE1126;"></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<!-- =====================================================================
+     PAGE: DASHBOARD
+====================================================================== -->
+<div id="page-dashboard" class="page">
+
+  <!-- Fixed header for dashboard -->
+  <header class="site-header">
+    <div class="flag-strip"></div>
+    <nav class="navbar">
+      <a class="nav-brand" style="cursor:pointer;text-decoration:none;">
+        <div class="nav-shield"><i class="fas fa-shield-halved"></i></div>
+        <div class="nav-title">Colombia Insurance Government<span>Área Ciudadana</span></div>
+      </a>
+      <div class="nav-links">
+        <div class="notif-btn" style="margin-right:4px;"><i class="fas fa-bell"></i><div class="notif-dot"></div></div>
+        <div class="user-avatar"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&crop=face" alt="Maria Garcia" /></div>
+        <button class="nav-link logout" onclick="showPage('page-home')" style="color:#ff8888;"><i class="fas fa-right-from-bracket" style="margin-right:6px;"></i>Salir</button>
+      </div>
+      <button class="hamburger" onclick="toggleDashMobileMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <div class="dash-wrapper">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-shield"><i class="fas fa-shield-halved"></i></div>
+        <div class="sidebar-title">CIG Portal<span>Área Ciudadana</span></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Principal</div>
+        <button class="sidebar-link active" onclick="showDash('dash-home',this)"><i class="fas fa-house"></i> Mi Panel</button>
+        <button class="sidebar-link" onclick="showDash('dash-profile',this)"><i class="fas fa-user"></i> Mi Perfil</button>
+        <div class="sidebar-section-label">Soporte</div>
+        <button class="sidebar-link" onclick="showDash('dash-agent',this)"><i class="fas fa-phone"></i> Contactar Agente</button>
+        <button class="sidebar-link"><i class="fas fa-file-lines"></i> Documentos</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="sidebar-link logout" onclick="showPage('page-home')"><i class="fas fa-right-from-bracket"></i> Cerrar Sesión</button>
+      </div>
+    </div>
+
+    <!-- DASH MAIN -->
+    <div class="dash-main">
+      <div class="dash-topbar">
+        <div class="dash-greeting">Bienvenida, Maria Garcia<span id="dash-date"></span></div>
+        <div class="dash-actions">
+          <div class="notif-btn"><i class="fas fa-bell"></i><div class="notif-dot"></div></div>
+          <div class="user-avatar"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&crop=face" alt="Maria Garcia" /></div>
+        </div>
+      </div>
+
+      <!-- ---- DASH HOME ---- -->
+      <div id="dash-home" class="dash-section active-section">
+        <div class="dash-content">
+          <div class="balance-hero">
+            <div class="balance-tag">Seguro Activo</div>
+            <div class="balance-label">Su Saldo Total de Seguro</div>
+            <div class="balance-amount"><em>$</em><span id="live-balance">48,500,000</span></div>
+            <div class="balance-currency">Pesos Colombianos (COP)</div>
+            <div class="quick-actions">
+              <button class="qa-btn qa-primary" onclick="showDash('dash-agent',null)"><i class="fas fa-phone"></i> Contactar Agente</button>
+              <button class="qa-btn qa-secondary"><i class="fas fa-file-lines"></i> Mis Documentos</button>
+            </div>
+          </div>
+
+          <div class="dash-grid">
+            <div class="dash-card">
+              <h3>Mi Perfil</h3>
+              <div class="profile-display">
+                <div class="profile-avatar-lg"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&crop=face" alt="Maria Garcia" /></div>
+                <div>
+                  <div class="profile-name">Maria Garcia Lopez</div>
+                  <div class="verified-badge"><i class="fas fa-check"></i> Cuenta Verificada</div>
+                </div>
+              </div>
+              <div class="info-list">
+                <div class="info-row"><span class="info-key">No. Cuenta</span><span class="info-val">COL-2024-00871</span></div>
+                <div class="info-row"><span class="info-key">País</span><span class="info-val">
+                  <span style="display:inline-flex;gap:2px;vertical-align:middle;">
+                    <span style="width:12px;height:8px;background:#FCD116;display:inline-block;border-radius:1px;"></span>
+                    <span style="width:6px;height:8px;background:#003087;display:inline-block;"></span>
+                    <span style="width:6px;height:8px;background:#CE1126;display:inline-block;border-radius:0 1px 1px 0;"></span>
+                  </span> Colombia</span></div>
+                <div class="info-row"><span class="info-key">Tipo de Seguro</span><span class="info-val">Vida + Salud</span></div>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <h3>Actividad Reciente</h3>
+              <table class="activity-table">
+                <thead><tr><th>Fecha</th><th>Descripción</th><th>Monto</th><th>Estado</th></tr></thead>
+                <tbody>
+                  <tr><td>09 Abr</td><td>Rendimiento mensual</td><td class="amt">+$2,150,000</td><td><span class="activity-status status-ok">Acreditado</span></td></tr>
+                  <tr><td>04 Abr</td><td>Aporte mensual</td><td class="amt">+$1,800,000</td><td><span class="activity-status status-ok">Aprobado</span></td></tr>
+                  <tr><td>01 Abr</td><td>Verificación cuenta</td><td class="amt">+$950,000</td><td><span class="activity-status status-ok">Completado</span></td></tr>
+                  <tr><td>28 Mar</td><td>Ajuste por inflación</td><td class="amt">+$620,000</td><td><span class="activity-status status-ok">Aprobado</span></td></tr>
+                  <tr><td>15 Mar</td><td>Renovación póliza</td><td class="amt">+$480,000</td><td><span class="activity-status status-ok">Aprobado</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- DASH PROFILE ---- -->
+      <div id="dash-profile" class="dash-section">
+        <div class="inner-page" style="max-width:700px;">
+          <h2>Mi Perfil Completo</h2>
+          <p class="sub">Información de su cuenta de seguro gubernamental</p>
+          <div class="white-card">
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--gray-light);">
+              <div class="profile-page-avatar"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop&crop=face" alt="Maria Garcia" /></div>
+              <div>
+                <div style="font-size:22px;font-weight:700;color:var(--navy-dark);">Maria Garcia Lopez</div>
+                <div class="verified-badge" style="margin-top:6px;"><i class="fas fa-check"></i> Cuenta Verificada</div>
+              </div>
+            </div>
+            <div class="info-list">
+              <div class="info-row"><span class="info-key">Nombre Completo</span><span class="info-val">Maria Garcia Lopez</span></div>
+              <div class="info-row"><span class="info-key">Número de Cuenta</span><span class="info-val">COL-2024-00871</span></div>
+              <div class="info-row"><span class="info-key">Correo Electrónico</span><span class="info-val">maria.garcia@example.com</span></div>
+              <div class="info-row"><span class="info-key">Teléfono</span><span class="info-val">+57 310 555 0101</span></div>
+              <div class="info-row"><span class="info-key">País</span><span class="info-val">
+                <span style="display:inline-flex;align-items:center;gap:6px;">
+                  <span style="display:inline-flex;gap:1px;vertical-align:middle;">
+                    <span style="width:14px;height:10px;background:#FCD116;display:inline-block;border-radius:2px 0 0 2px;"></span>
+                    <span style="width:7px;height:10px;background:#003087;display:inline-block;"></span>
+                    <span style="width:7px;height:10px;background:#CE1126;display:inline-block;border-radius:0 2px 2px 0;"></span>
+                  </span>Colombia
+                </span>
+              </span></div>
+              <div class="info-row"><span class="info-key">Departamento</span><span class="info-val">Bogotá D.C.</span></div>
+              <div class="info-row"><span class="info-key">Tipo de Seguro</span><span class="info-val">Seguro de Vida + Salud</span></div>
+              <div class="info-row"><span class="info-key">Saldo Actual</span><span class="info-val" style="color:var(--navy-dark);font-size:15px;font-weight:700;">$48,500,000 COP</span></div>
+              <div class="info-row"><span class="info-key">Estado de Cuenta</span><span class="info-val" style="color:var(--green);"><i class="fas fa-check-circle"></i> Activa y Verificada</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- DASH AGENT ---- -->
+      <div id="dash-agent" class="dash-section">
+        <div class="inner-page">
+          <h2>Contactar Agente</h2>
+          <p class="sub">Su agente de seguros asignado está disponible para ayudarle</p>
+          <div class="agent-card">
+            <div class="agent-header">
+              <div class="agent-avatar">OG</div>
+              <div>
+                <div class="agent-name">Olivia Gomez</div>
+                <div class="agent-role">Agente de Seguros Gubernamentales — Región Bogotá</div>
+                <div class="agent-online">Disponible ahora</div>
+              </div>
+            </div>
+            <div class="info-list" style="margin-bottom:24px;">
+              <div class="info-row"><span class="info-key"><i class="fas fa-phone" style="margin-right:6px;"></i>Teléfono</span><span class="info-val">+57 1 800 0011</span></div>
+              <div class="info-row"><span class="info-key"><i class="fas fa-envelope" style="margin-right:6px;"></i>Correo</span><span class="info-val">o.gomez@cig.gov.co</span></div>
+              <div class="info-row"><span class="info-key"><i class="fas fa-clock" style="margin-right:6px;"></i>Horario</span><span class="info-val">Lun–Vie, 8:00am – 5:00pm</span></div>
+              <div class="info-row"><span class="info-key"><i class="fas fa-location-dot" style="margin-right:6px;"></i>Oficina</span><span class="info-val">Bogotá D.C., Colombia</span></div>
+            </div>
+            <h3 style="font-size:15px;font-weight:600;color:var(--navy-dark);margin-bottom:16px;">Enviar Mensaje</h3>
+            <div class="lform-group"><label>Asunto</label><input class="lform-control" id="msg-asunto" type="text" placeholder="Ej: Consulta sobre mi póliza" oninput="validateMsgForm()" /></div>
+            <div class="lform-group"><label>Mensaje</label><textarea class="lform-control" id="msg-body" rows="4" placeholder="Escriba su mensaje aquí..." style="resize:vertical;" oninput="validateMsgForm()"></textarea></div>
+            <button class="btn-submit" id="btn-msg" onclick="sendMsg()" disabled style="margin-top:8px;">Enviar Mensaje <i class="fas fa-paper-plane"></i></button>
+            <div class="msg-success-note" id="msg-success"><i class="fas fa-circle-check" style="margin-right:6px;"></i>Su mensaje ha sido enviado exitosamente. La agente Olivia Gomez le contactará dentro de 24 horas hábiles.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dash-main -->
+  </div><!-- /dash-wrapper -->
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-bottom" style="padding:20px 0;">
+        <p>© 2026 Colombia Insurance Government. Portal Seguro — Área Ciudadana.</p>
+        <div class="footer-flag-real" title="Colombia">
+          <div class="flag-col" style="width:28px;background:#FCD116;"></div>
+          <div class="flag-col" style="width:14px;background:#003087;"></div>
+          <div class="flag-col" style="width:14px;background:#CE1126;"></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-dashboard -->
+
+<!-- Mobile sidebar toggle button -->
+<button class="mobile-sidebar-toggle" id="mobile-sidebar-btn" onclick="toggleSidebar()" style="display:none;" aria-label="Menú lateral">
+  <i class="fas fa-bars"></i>
+</button>
+
+<script>
+// ---- LOADER ----
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+    animateStats();
+  }, 2000);
+});
+
+// ---- PAGE ROUTING ----
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none';
+  });
+  const pg = document.getElementById(id);
+  if (id === 'page-dashboard') {
+    pg.style.display = 'flex';
+    pg.style.flexDirection = 'column';
+    document.getElementById('mobile-sidebar-btn').style.display = 'flex';
+  } else {
+    pg.style.display = 'block';
+    document.getElementById('mobile-sidebar-btn').style.display = 'none';
+  }
+  setTimeout(() => pg.classList.add('active'), 10);
+  window.scrollTo(0, 0);
+  // close any open mobile menus
+  ['mobile-menu','mobile-menu2','mobile-menu3'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('open');
+  });
+}
+
+// ---- MOBILE MENUS ----
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function toggleMobileMenu2() {
+  document.getElementById('mobile-menu2').classList.toggle('open');
+}
+function toggleMobileMenu3() {
+  document.getElementById('mobile-menu3').classList.toggle('open');
+}
+function toggleDashMobileMenu() {
+  toggleSidebar();
+}
+
+// ---- MOBILE SIDEBAR ----
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+// ---- LOGIN VALIDATION ----
+function validateLogin() {
+  const email = document.getElementById('inp-email').value.trim();
+  const pass = document.getElementById('inp-pass').value.trim();
+  document.getElementById('btn-login').disabled = !(email.length > 0 && pass.length > 0);
+}
+
+function doLogin() {
+  const email = document.getElementById('inp-email').value.trim();
+  const pass = document.getElementById('inp-pass').value.trim();
+  const err = document.getElementById('login-err');
+  if (email === 'maria@example.com' && pass === 'admin123') {
+    err.style.display = 'none';
+    showPage('page-dashboard');
+    const now = new Date();
+    document.getElementById('dash-date').textContent = now.toLocaleDateString('es-CO', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    startBalanceGrowth();
+  } else {
+    err.style.display = 'block';
+    err.style.animation = 'none';
+    requestAnimationFrame(() => { err.style.animation = 'fade-up 0.3s ease'; });
+  }
+}
+
+// ---- REGISTER STEP VALIDATION ----
+let currentStep = 1;
+
+function validateStep1() {
+  const n = document.getElementById('reg-nombre').value.trim();
+  const a = document.getElementById('reg-apellido').value.trim();
+  const f = document.getElementById('reg-fecha').value.trim();
+  const g = document.getElementById('reg-genero').value;
+  document.getElementById('step1-next').disabled = !(n && a && f && g);
+}
+function validateStep2() {
+  const e = document.getElementById('reg-email').value.trim();
+  const t = document.getElementById('reg-tel').value.trim();
+  const d = document.getElementById('reg-depto').value;
+  const c = document.getElementById('reg-ciudad').value.trim();
+  document.getElementById('step2-next').disabled = !(e && t && d && c);
+}
+function validateStep3() {
+  const p1 = document.getElementById('reg-pass').value;
+  const p2 = document.getElementById('reg-pass2').value;
+  document.getElementById('step3-next').disabled = !(p1.length >= 8 && p1 === p2);
+}
+
+function goStep(n) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step' + n).classList.add('active');
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById('ps' + i).classList.toggle('done', i <= n);
+  }
+  for (let i = 1; i <= 2; i++) {
+    document.getElementById('pl' + i).classList.toggle('done', i < n);
+  }
+}
+
+function completeRegister() {
+  document.getElementById('success-overlay').classList.add('show');
+  currentStep = 1;
+  goStep(1);
+}
+
+function previewPhoto(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.getElementById('photo-preview');
+      img.src = e.target.result;
+      img.style.display = 'block';
+      document.getElementById('upload-placeholder').style.display = 'none';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ---- MODAL ----
+function closeModal() { document.getElementById('forgot-modal').classList.remove('show'); }
+document.getElementById('forgot-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ---- DASHBOARD SECTIONS ----
+function showDash(id, btn) {
+  document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active-section'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById(id).classList.add('active-section');
+  if (btn) btn.classList.add('active');
+  closeSidebar();
+}
+
+// ---- CONTACT MSG VALIDATION ----
+function validateMsgForm() {
+  const a = document.getElementById('msg-asunto').value.trim();
+  const b = document.getElementById('msg-body').value.trim();
+  document.getElementById('btn-msg').disabled = !(a && b);
+}
+function sendMsg() {
+  document.getElementById('msg-success').style.display = 'block';
+  document.getElementById('btn-msg').disabled = true;
+}
+
+// ---- BALANCE GROWTH ----
+let balanceNum = 48500000;
+function startBalanceGrowth() {
+  setInterval(() => {
+    const increase = Math.floor(Math.random() * 12000) + 3000;
+    balanceNum += increase;
+    document.getElementById('live-balance').textContent = balanceNum.toLocaleString('es-CO');
+  }, 4000);
+}
+
+// ---- STAT COUNTERS ----
+function animateStats() {
+  document.querySelectorAll('[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    let current = 0;
+    const step = target / 50;
+    const interval = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.floor(current);
+      if (current >= target) clearInterval(interval);
+    }, 30);
+  });
+}
+</script>
+</body>
+</html>
