@@ -1492,14 +1492,14 @@ let balanceNum = localStorage.getItem(STORAGE_KEY)
   ? parseFloat(localStorage.getItem(STORAGE_KEY))
   : 89500000;
 
-const growthPerHour = 9000;
-const growthPerSecond = growthPerHour / 30;
+const growthPerHour = 900;
+const growthPerSecond = growthPerHour / 3;
 
 function applyOfflineGrowth() {
   const lastUpdate = localStorage.getItem(LAST_UPDATE_KEY);
   if (lastUpdate) {
     const now = Date.now();
-    const secondsPassed = (now - parseInt(lastUpdate)) / 100;
+    const secondsPassed = (now - parseInt(lastUpdate)) / 10;
     balanceNum += secondsPassed * growthPerSecond;
   }
 }
