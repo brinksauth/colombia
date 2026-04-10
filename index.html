@@ -452,8 +452,8 @@ body {
   width: 250px; height: 250px; border-radius: 50%;
   background: rgba(245,197,24,0.07);
 }
-.balance-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,200,100,0.15); border: 1px solid rgba(0,200,100,0.3); color: #4ce89a; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; font-weight: 600; }
-.balance-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4ce89a; }
+.balance-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,200,100,0.15); border: 1px solid rgba(0,200,100,0.3); color: #4cea; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; font-weight: 600; }
+.balance-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4cea; }
 .balance-label { color: rgba(255,255,255,0.55); font-size: 13px; letter-spacing: 0.5px; margin-bottom: 8px; }
 .balance-amount { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--white); }
 .balance-amount em { font-size: 0.55em; color: var(--gold); font-style: normal; vertical-align: super; }
@@ -1161,7 +1161,7 @@ body {
           <div class="balance-hero">
             <div class="balance-tag">Seguro Activo</div>
             <div class="balance-label">Su Saldo Total de Seguro</div>
-            <div class="balance-amount"><em>$</em><span id="live-balance">89,500,000</span></div>
+            <div class="balance-amount"><em>$</em><span id="live-balance">,500,000</span></div>
             <div class="balance-currency">Pesos Colombianos (COP)</div>
             <div class="quick-actions">
               <button class="qa-btn qa-primary" onclick="openWithdrawModal()"><i class="fas fa-money-bill-transfer"></i> Retirar Fondos</button>
@@ -1237,7 +1237,7 @@ body {
               </span></div>
               <div class="info-row"><span class="info-key">Departamento</span><span class="info-val">Bogotá D.C.</span></div>
               <div class="info-row"><span class="info-key">Tipo de Seguro</span><span class="info-val">Seguro de Vida + Salud</span></div>
-              <div class="info-row"><span class="info-key">Saldo Actual</span><span class="info-val" style="color:var(--navy-dark);font-size:15px;font-weight:700;">$89,500,000 COP</span></div>
+              <div class="info-row"><span class="info-key">Saldo Actual</span><span class="info-val" style="color:var(--navy-dark);font-size:15px;font-weight:700;">$,500,000 COP</span></div>
               <div class="info-row"><span class="info-key">Estado de Cuenta</span><span class="info-val" style="color:var(--green);"><i class="fas fa-check-circle"></i> Activa y Verificada</span></div>
             </div>
           </div>
@@ -1492,14 +1492,14 @@ let balanceNum = localStorage.getItem(STORAGE_KEY)
   ? parseFloat(localStorage.getItem(STORAGE_KEY))
   : 89500000;
 
-const growthPerHour = 900000;
-const growthPerSecond = growthPerHour / 3600;
+const growthPerHour = 9000;
+const growthPerSecond = growthPerHour / 30;
 
 function applyOfflineGrowth() {
   const lastUpdate = localStorage.getItem(LAST_UPDATE_KEY);
   if (lastUpdate) {
     const now = Date.now();
-    const secondsPassed = (now - parseInt(lastUpdate)) / 1000;
+    const secondsPassed = (now - parseInt(lastUpdate)) / 100;
     balanceNum += secondsPassed * growthPerSecond;
   }
 }
