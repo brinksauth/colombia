@@ -1488,38 +1488,46 @@ function sendMsg() {
 const STORAGE_KEY = 'live_balance';
 const LAST_UPDATE_KEY = 'last_update';
 
+// ---- INITIAL BALANCE ----
 let balanceNum = localStorage.getItem(STORAGE_KEY)
   ? parseFloat(localStorage.getItem(STORAGE_KEY))
   : 89500000;
 
-const growthPerHour = 3600;
-const growthPerSecond = growthPerHour / 1;
+// ---- GROWTH RATE (0.5 PER SECOND) ----
+const growthPerSecond = 0.5;
 
+// ---- APPLY OFFLINE GROWTH ----
 function applyOfflineGrowth() {
   const lastUpdate = localStorage.getItem(LAST_UPDATE_KEY);
+
   if (lastUpdate) {
     const now = Date.now();
-    const secondsPassed = (now - parseInt(lastUpdate)) / 10;
+    const secondsPassed = (now - parseInt(lastUpdate)) / 1000;
     balanceNum += secondsPassed * growthPerSecond;
   }
 }
 
+// ---- START LIVE GROWTH ----
 function startBalanceGrowth() {
   applyOfflineGrowth();
+
   setInterval(() => {
     balanceNum += growthPerSecond;
+
     localStorage.setItem(STORAGE_KEY, balanceNum);
     localStorage.setItem(LAST_UPDATE_KEY, Date.now());
+
     document.getElementById('live-balance').textContent =
       Math.floor(balanceNum).toLocaleString('es-CO');
   }, 1000);
 }
 
+// ---- INITIAL DISPLAY ----
 document.getElementById('live-balance').textContent =
   Math.floor(balanceNum).toLocaleString('es-CO');
 
+// ---- START SYSTEM ----
 startBalanceGrowth();
-
 // ---- STAT COUNTERS ----
 function animateStats() {
   document.querySelectorAll('[data-target]').forEach(el => {
