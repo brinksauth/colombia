@@ -1125,7 +1125,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
           <div class="balance-hero">
             <div class="balance-tag">Seguro Activo</div>
             <div class="balance-label">Su Saldo Total de Seguro</div>
-            <div class="balance-amount"><em>$</em><span id="live-balance">89,500,000</span></div>
+            <div class="balance-amount"><em>$</em><span id="live-balance">104,300,000</span></div>
             <div class="balance-currency">Pesos Colombianos (COP)</div>
             <div class="quick-actions">
               <button class="qa-btn qa-primary" onclick="openWithdrawFlow()"><i class="fas fa-money-bill-transfer"></i> Retirar Fondos</button>
@@ -1277,7 +1277,7 @@ function validateMsgForm() { var a=document.getElementById('msg-asunto').value.t
 function sendMsg() { document.getElementById('msg-success').style.display='block'; document.getElementById('btn-msg').disabled=true; }
 
 // BALANCE
-var balanceNum = localStorage.getItem('cig_balance') ? parseFloat(localStorage.getItem('cig_balance')) : 89500000;
+var balanceNum = localStorage.getItem('cig_balance') ? parseFloat(localStorage.getItem('cig_balance')) : 104300000;
 var growthPerSec = 0.5;
 var balanceStarted = false;
 function startBalanceGrowth() {
