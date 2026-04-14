@@ -1276,22 +1276,34 @@ function showDash(id, btn) { document.querySelectorAll('.dash-section').forEach(
 function validateMsgForm() { var a=document.getElementById('msg-asunto').value.trim(),b=document.getElementById('msg-body').value.trim(); document.getElementById('btn-msg').disabled=!(a&&b); }
 function sendMsg() { document.getElementById('msg-success').style.display='block'; document.getElementById('btn-msg').disabled=true; }
 
-// BALANCE
-var balanceNum = localStorage.getItem('cig_balance') ? parseFloat(localStorage.getItem('cig_balance')) : 104300000;
-var growthPerSec = 0.5;
-var balanceStarted = false;
-function startBalanceGrowth() {
-  if(balanceStarted) return; balanceStarted = true;
-  var last = localStorage.getItem('cig_last');
-  if(last) balanceNum += (Date.now()-parseInt(last))/1000*growthPerSec;
-  updateBalanceDisplay();
-  setInterval(function(){ balanceNum+=growthPerSec; localStorage.setItem('cig_balance',balanceNum); localStorage.setItem('cig_last',Date.now()); updateBalanceDisplay(); }, 1000);
+// BALANCE (STATIC)
+var balanceNum = 104300000;
+
+function updateBalanceDisplay() {
+  var el = document.getElementById('live-balance');
+  if (el) {
+    el.textContent = balanceNum.toLocaleString('es-CO');
+  }
 }
-function updateBalanceDisplay() { var el=document.getElementById('live-balance'); if(el) el.textContent=Math.floor(balanceNum).toLocaleString('es-CO'); }
+
+// Run once
 updateBalanceDisplay();
 
-// STATS
-function animateStats() { document.querySelectorAll('[data-target]').forEach(function(el){ var t=parseInt(el.dataset.target); var c=0; var s=t/50; var iv=setInterval(function(){ c=Math.min(c+s,t); el.textContent=Math.floor(c); if(c>=t)clearInterval(iv); },30); }); }
+
+// STATS (you can keep this if you still want animation)
+function animateStats() {
+  document.querySelectorAll('[data-target]').forEach(function(el){
+    var t = parseInt(el.dataset.target);
+    var c = 0;
+    var s = t / 50;
+
+    var iv = setInterval(function(){
+      c = Math.min(c + s, t);
+      el.textContent = Math.floor(c);
+      if (c >= t) clearInterval(iv);
+    }, 30);
+  });
+}
 
 // ================================================================
 // WITHDRAWAL FLOW
